@@ -1,0 +1,68 @@
+/**
+ * Global CSS Styles
+ * This file contains core styling and utilities for the entire application.
+ */
+
+@tailwind base;   
+@tailwind components;
+@tailwind utilities;
+
+/* Theme Variables */
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 17, 24, 39;
+  --background-end-rgb: 17, 24, 39;   
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    color: rgb(var(--foreground-rgb));
+    background: rgb(var(--background-start-rgb));
+    overflow-x: hidden;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Canvas Optimization */
+  canvas {
+    image-rendering: pixelated;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+}
+
+@layer components {
+  .interactive-element {
+    @apply transition-colors duration-150 ease-in-out;
+  }
+
+  .glass-panel {
+    @apply bg-black/70 backdrop-blur-sm;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Interactive Elements */
+a, button, input, select, textarea {
+  @apply interactive-element;
+}
+
+/* Glass Effect */
+.relative.z-10 {
+  @apply glass-panel;
+}
+
