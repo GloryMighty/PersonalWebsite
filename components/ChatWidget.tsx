@@ -1,14 +1,33 @@
 "use client"
 
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
 import { motion } from "framer-motion"
 import { Loader2, XCircle, MessageSquare } from "lucide-react"
 
 interface Message {
+  id: string
   role: string
   content: string
   timestamp: number
 }
+
+const MessageItem = React.memo<{ message: Message }>(({ message }) => (
+  <div
+    className={`flex ${
+      message.role === "user" ? "justify-end" : "justify-start"
+    }`}
+  >
+    <div
+      className={`${
+        message.role === "user"
+          ? "bg-blue-500 text-white"
+          : "bg-gray-700 text-gray-200"
+      } rounded-lg p-2 max-w-[80%]`}
+    >
+      {message.content}
+    </div>
+  </div>
+));
 
 const ChatWidget: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([])
@@ -17,15 +36,17 @@ const ChatWidget: React.FC = () => {
   const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const abortControllerRef = useRef<AbortController | null>(null)
-  const [isOpen, setIsOpen] = useState(false) // Manage open/closed state
+  const [isOpen, setIsOpen] = useState(false)
 
-  // Scroll to the bottom of the messages list whenever messages change
-  useEffect(() => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-  }, [messages])
+  }, [])
 
-  // Function to send a message and handle retries
-  const sendMessageWithRetry = async (message: string, retries: number = 3): Promise<string> => {
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, scrollToBottom])
+
+  const sendMessageWithRetry = useCallback(async (message: string, retries: number = 3): Promise<string> => {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort()
     }
@@ -65,13 +86,14 @@ const ChatWidget: React.FC = () => {
     } finally {
       abortControllerRef.current = null
     }
-  }
+  }, [])
 
-  const handleSendMessage = async () => {
+  const handleSendMessage = useCallback(async () => {
     if (!inputMessage.trim() || isLoading) return
     setError(null)
 
     const newMessage: Message = {
+      id: `msg-${Date.now()}`,
       role: "user",
       content: inputMessage.trim(),
       timestamp: Date.now(),
@@ -85,6 +107,7 @@ const ChatWidget: React.FC = () => {
       const responseText = await sendMessageWithRetry(newMessage.content)
 
       const assistantMessage: Message = {
+        id: `msg-${Date.now()}`,
         role: "assistant",
         content: responseText,
         timestamp: Date.now(),
@@ -96,6 +119,7 @@ const ChatWidget: React.FC = () => {
       setError(error instanceof Error ? error.message : "An error occurred")
 
       const errorMessage: Message = {
+        id: `msg-${Date.now()}`,
         role: "assistant",
         content: "I apologize, but I'm having trouble connecting. Please try again later.",
         timestamp: Date.now(),
@@ -104,23 +128,33 @@ const ChatWidget: React.FC = () => {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [inputMessage, isLoading, sendMessageWithRetry])
 
-  // Initialize with the system prompt on component mount
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessage()
+    }
+  }, [handleSendMessage])
+
+  const toggleOpen = useCallback(() => {
+    setIsOpen(prev => !prev)
+  }, [])
+
   useEffect(() => {
-    if (isOpen) { // Only show initial message when the chat is open
+    if (isOpen) {
       const initialMessage: Message = {
+        id: `msg-${Date.now()}`,
         role: "assistant",
         content: "Hello! I am Viacheslav's AI assistant. I am here to help you learn more about him and his work. How can I help you today?",
         timestamp: Date.now(),
       };
       setMessages([initialMessage]);
     } else {
-      setMessages([]); // Clear messages when closed
+      setMessages([]);
     }
-  }, [isOpen]); // Run this effect when isOpen changes
+  }, [isOpen]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (abortControllerRef.current) {
@@ -129,10 +163,12 @@ const ChatWidget: React.FC = () => {
     }
   }, [])
 
-  // Toggle open/closed state
-  const toggleOpen = () => {
-    setIsOpen(!isOpen)
-  }
+  const memoizedMessages = useMemo(() => 
+    messages.map(message => (
+      <MessageItem key={message.id} message={message} />
+    )), 
+    [messages]
+  );
 
   return (
     <motion.div
@@ -141,37 +177,19 @@ const ChatWidget: React.FC = () => {
       transition={{ duration: 0.5 }}
       className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50"
     >
-      {/* Conditional rendering based on isOpen */}
       {isOpen ? (
         <div className="bg-gray-800/80 backdrop-blur-md rounded-lg shadow-lg w-80 md:w-96 flex flex-col h-[400px] md:h-[500px]">
           <div className="flex items-center justify-between p-4 border-b border-gray-700">
             <h2 className="text-lg font-semibold text-white">VAI Chat</h2>
             <button
-              onClick={toggleOpen} // Use toggleOpen to close
+              onClick={toggleOpen}
               className="text-gray-400 hover:text-gray-300"
             >
               <XCircle className="w-5 h-5" />
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 space-y-2" style={{ scrollBehavior: "smooth" }}>
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex ${
-                  message.role === "user" ? "justify-end" : "justify-start"
-                }`}
-              >
-                <div
-                  className={`${
-                    message.role === "user"
-                      ? "bg-blue-500 text-white"
-                      : "bg-gray-700 text-gray-200"
-                  } rounded-lg p-2 max-w-[80%]`}
-                >
-                  {message.content}
-                </div>
-              </div>
-            ))}
+            {memoizedMessages}
             <div ref={messagesEndRef} />
           </div>
           <div className="p-4 border-t border-gray-700">
@@ -183,12 +201,7 @@ const ChatWidget: React.FC = () => {
                 type="text"
                 value={inputMessage}
                 onChange={e => setInputMessage(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault()
-                    handleSendMessage()
-                  }
-                }}
+                onKeyDown={handleKeyDown}
                 placeholder="Type your message..."
                 className="flex-1 p-2 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isLoading}
@@ -200,40 +213,23 @@ const ChatWidget: React.FC = () => {
                 }`}
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <Loader2 className="animate-spin w-5 h-5" />
-                ) : (
-                  "Send"
-                )}
+                {isLoading ? <Loader2 className="animate-spin" /> : "Send"}
               </button>
             </div>
           </div>
         </div>
       ) : (
         <motion.button
-          onClick={toggleOpen} // Use toggleOpen to open
+          onClick={toggleOpen}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          className="bg-gray-700/90 backdrop-blur-md rounded-full p-3 shadow-lg hover:bg-gray-600/90 transition-colors duration-200"
+          className="bg-blue-600 text-white p-3 rounded-full shadow-lg hover:bg-blue-700 transition-colors"
         >
-          <MessageSquare className="w-6 h-6 text-white" />
-          {/* Add a subtle pulsing effect */}
-          <motion.div
-            className="absolute inset-0 rounded-full bg-blue-500/20"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.8, 0, 0.8],
-              transition: {
-                duration: 2,
-                repeat: Infinity,
-                repeatType: "loop",
-              }
-            }}
-          />
+          <MessageSquare />
         </motion.button>
       )}
     </motion.div>
   )
 }
 
-export default ChatWidget
+export default React.memo(ChatWidget);

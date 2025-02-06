@@ -1,12 +1,23 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { NextResponse } from 'next/server';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+// Enhanced environment variable handling
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-pro';
+
+// Validate critical environment variables
+if (!GEMINI_API_KEY) {
+    console.error('CRITICAL: Gemini API Key is not set');
+    throw new Error('GEMINI_API_KEY must be set in environment variables');
+}
+
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 // Use environment variable for model name, with a fallback
-const modelName = process.env.GEMINI_MODEL!;
+const modelName = GEMINI_MODEL;
 const model = genAI.getGenerativeModel({
     model: modelName,
+    
     safetySettings: [
         {
             category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
