@@ -1,19 +1,15 @@
+// app/page.tsx
+
 "use client"
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import SocialLinksWidget from "@/components/SocialLinksWidget"
-import ProjectCarousel from "@/components/ProjectCarousel"
+import SocialLinksWidget from "../components/SocialLinksWidget"
 import ConstellationBackground from "../components/ConstellationBackground"
 import MicroSparks from "../components/MicroSparks"
 import ChatWidget from "../components/ChatWidget"
   
 // Types
-interface Project {
-  id: number
-  title: string
-  images: string[]
-}
 
 interface BioSection {
   title: string
@@ -237,36 +233,6 @@ const AnimatedTitle: React.FC = () => {
   )
 }
 
-// Data
-const projects: Project[] = [
-  { 
-    id: 1, 
-    title: "React & Vite App", 
-    images: [
-      "/ReactScreen/Main.png",
-      "/ReactScreen/Profile.png",
-      "/ReactScreen/Description.png",
-      "/ReactScreen/Approach.png",
-      "/ReactScreen/Upgrade.png"
-    ]
-  },
-  { 
-    id: 2, 
-    title: "Python Streamlit App", 
-    images: [
-      "/StreamlitScreen/Main.png",
-      "/StreamlitScreen/Upload.png",
-      "/StreamlitScreen/Process.png",
-      "/StreamlitScreen/AIResponse.png",
-      "/StreamlitScreen/Delete.png"
-    ]
-  },
-  { 
-    id: 3, 
-    title: "My Introduction", 
-    images: ["/placeholder.svg?height=315&width=560"]
-  },
-]
 
 const bioSections: BioSection[] = [
   {
@@ -298,7 +264,6 @@ const bioSections: BioSection[] = [
 
 // Main Page Component
 export default function Home(): JSX.Element {
-  const [activeProject, setActiveProject] = useState(projects[0])
   const { scrollYProgress } = useScroll()
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
 
@@ -320,6 +285,10 @@ useEffect(() => {
   window.addEventListener('resize', handleResize); // Call it on resize
   return () => window.removeEventListener('resize', handleResize); // Cleanup
 }, []);
+
+const redirectToProjects = () => {
+  window.location.href = "/projects"
+}
 
 return (
     <div className="min-h-screen relative">
@@ -358,39 +327,12 @@ return (
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl tech-text"
-              onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => redirectToProjects()}
             >
               Explore My Projects
             </motion.button>
           </motion.div>
 
-          <section id="projects" className="content-glass p-8 backdrop-blur-md max-w-5xl mx-auto">
-            <h2 className="tech-text text-3xl mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
-              My Projects
-            </h2>
-            <div className="grid grid-cols-1 gap-8">
-              {projects.map((project) => (
-                <motion.div
-                  key={project.id}
-                  className="rounded-lg overflow-hidden transform transition-all duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <div className="p-4 bg-gray-800/80 backdrop-blur mb-4">
-                    <h3 className="text-2xl font-semibold text-center tech-text bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
-                      {project.title}
-                    </h3>
-                  </div>
-                  <ProjectCarousel
-                    images={project.images}
-                    title={project.title}
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </section>
 
 
         </main>
