@@ -216,7 +216,7 @@ const BioSection: React.FC<BioSectionProps> = ({ title, content, index }) => {
 
 // Add this new component for the animated title
 const AnimatedTitle: React.FC = () => {
-  const titles = ["Software Engineer", "Application Developer", "AI Automations"]
+  const titles = ["Website Developer", "AI Automations", "Technological Enthusiast"]
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
