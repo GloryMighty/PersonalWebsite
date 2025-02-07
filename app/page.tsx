@@ -302,13 +302,15 @@ export default function Home(): JSX.Element {
   const { scrollYProgress } = useScroll()
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
 
-  return (
+// Handle resize for mobile devices and adjust styling accordingly, making titles and headline smaller
+
+return (
     <div className="min-h-screen relative">
       <ConstellationBackground scrollYProgress={scrollYProgress} />
       <ChatWidget />
       <SocialLinksWidget />
       <div className="relative">
-        <header className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-[50vh]">
+        <header className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-[50vh]"> 
           <div className="content-glass p-8 rounded-lg backdrop-blur-md text-center max-w-3xl mx-auto">
             <h1 className="tech-text text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-100 via-white to-blue-100 animate-glow">
               Viacheslav Mamatov

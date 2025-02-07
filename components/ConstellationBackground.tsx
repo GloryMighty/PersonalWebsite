@@ -20,14 +20,34 @@ interface Connection {
   alpha: number
 }
 
-// Adjusted constants for better visibility
-const POINT_COUNT = 50 // Increased number of stars
-const CONNECTION_DISTANCE = 170 // Increased connection distance
-const MOUSE_INFLUENCE_DISTANCE = 250 // Increased mouse influence
-const MOUSE_REPEL_STRENGTH = 0.8 // Reduced repel strength for smoother movement
-const POINT_SPEED = 0.3 // Reduced speed for smoother movement
-const BASE_ALPHA = 0.8 // Reduced base opacity for better content visibility
-const CONNECTION_ALPHA = 1.0 // Reduced connection line opacity
+
+// Constants for computer graphics
+const POINT_COUNT = 20 // Number of stars
+const CONNECTION_DISTANCE = 170  // Nonnection distance
+const MOUSE_INFLUENCE_DISTANCE = 250 // Mouse influence
+const MOUSE_REPEL_STRENGTH = 0.8 // Movement speed of mouse affect
+const POINT_SPEED = 0.5 // Speed of movement
+const BASE_ALPHA = 0.8 // Base opacity for better content visibility
+const CONNECTION_ALPHA = 0.9 // Connection line opacity
+
+// Constants for mobile devices
+const MOBILE_POINT_COUNT = 10 // Number of stars on mobile
+const MOBILE_CONNECTION_DISTANCE = 100 // Nonnection distance on mobile
+const MOBILE_MOUSE_INFLUENCE_DISTANCE = 150 // Mouse influence on mobile
+const MOBILE_MOUSE_REPEL_STRENGTH = 0.6 // Movement speed of mouse affect on mobile
+const MOBILE_POINT_SPEED = 0.3 // Speed of movement on mobile
+const MOBILE_BASE_ALPHA = 0.6 // Base opacity for better content visibility on mobile
+const MOBILE_CONNECTION_ALPHA = 0.7 // Connection line opacity on mobile
+
+// Initialize less constants for mobile devices
+const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+const mobilePointCount = isMobile ? MOBILE_POINT_COUNT : POINT_COUNT
+const mobileConnectionDistance = isMobile ? MOBILE_CONNECTION_DISTANCE : CONNECTION_DISTANCE
+const mobileMouseInfluenceDistance = isMobile ? MOBILE_MOUSE_INFLUENCE_DISTANCE : MOUSE_INFLUENCE_DISTANCE
+const mobileMouseRepelStrength = isMobile ? MOBILE_MOUSE_REPEL_STRENGTH : MOUSE_REPEL_STRENGTH
+const mobilePointSpeed = isMobile ? MOBILE_POINT_SPEED : POINT_SPEED
+const mobileBaseAlpha = isMobile ? MOBILE_BASE_ALPHA : BASE_ALPHA
+const mobileConnectionAlpha = isMobile ? MOBILE_CONNECTION_ALPHA : CONNECTION_ALPHA
 
 const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYProgress }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -38,16 +58,16 @@ const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYPr
   const animationFrameRef = useRef<number>()
 
   // Parallax effect using useTransform
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-20%']) // Adjust '-20%' to control parallax strength
+  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']) // Adjust '-20%' to control parallax strength
 
-  // Initialize points with random positions
+  // Initialize points with random positions. For mobile devices use less points and smaller sizes
   const initializePoints = (width: number, height: number) => {
-    return Array.from({ length: POINT_COUNT }, () => ({
+    return Array.from({ length: mobilePointCount }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * POINT_SPEED,
-      vy: (Math.random() - 0.5) * POINT_SPEED,
-      radius: Math.random() * 2 + 1, // Increased star size
+      vx: (Math.random() - 0.5) * mobilePointSpeed,
+      vy: (Math.random() - 0.5) * mobilePointSpeed,
+      radius: Math.random() * 3 + 1, // Increased star size
       alpha: Math.random() * 0.3 + BASE_ALPHA,
       targetAlpha: Math.random() * 0.3 + BASE_ALPHA,
     }))
@@ -65,8 +85,8 @@ const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYPr
       const dy = point.y - mouseRef.current.y
       const distance = Math.sqrt(dx * dx + dy * dy)
 
-      if (distance < MOUSE_INFLUENCE_DISTANCE) {
-        const force = (MOUSE_INFLUENCE_DISTANCE - distance) * MOUSE_REPEL_STRENGTH
+      if (distance < mobileMouseInfluenceDistance) {
+        const force = (mobileMouseInfluenceDistance - distance) * mobileMouseRepelStrength
         point.vx += (dx / distance) * force * 0.01
         point.vy += (dy / distance) * force * 0.01
       }
@@ -77,15 +97,15 @@ const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYPr
 
       // Speed limiting
       const speed = Math.sqrt(point.vx * point.vx + point.vy * point.vy)
-      if (speed > POINT_SPEED) {
-        point.vx = (point.vx / speed) * POINT_SPEED
-        point.vy = (point.vy / speed) * POINT_SPEED
+      if (speed > mobilePointSpeed) {
+        point.vx = (point.vx / speed) * mobilePointSpeed
+        point.vy = (point.vy / speed) * mobilePointSpeed
       }
 
       // Twinkling effect
       point.alpha += (point.targetAlpha - point.alpha) * 0.02
       if (Math.random() < 0.002) {
-        point.targetAlpha = Math.random() * 0.3 + BASE_ALPHA
+        point.targetAlpha = Math.random() * 0.3 + mobileBaseAlpha
       }
     })
   }
@@ -100,8 +120,8 @@ const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYPr
         const dy = points[i].y - points[j].y
         const distance = Math.sqrt(dx * dx + dy * dy)
 
-        if (distance < CONNECTION_DISTANCE) {
-          const alpha = (1 - distance / CONNECTION_DISTANCE) * CONNECTION_ALPHA
+        if (distance < mobileConnectionDistance) {
+          const alpha = (1 - distance / mobileConnectionDistance) * mobileConnectionAlpha
           newConnections.push({
             start: points[i],
             end: points[j],

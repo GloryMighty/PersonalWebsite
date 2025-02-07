@@ -141,6 +141,7 @@ const ChatWidget: React.FC = () => {
     setIsOpen(prev => !prev)
   }, [])
 
+  // Initialize messages
   useEffect(() => {
     if (isOpen) {
       const initialMessage: Message = {
@@ -202,7 +203,7 @@ const ChatWidget: React.FC = () => {
                 value={inputMessage}
                 onChange={e => setInputMessage(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Type your message..."
+                placeholder="Ask me anything..."
                 className="flex-1 p-2 bg-gray-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 disabled={isLoading}
               />
