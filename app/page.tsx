@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
-import { Github, Linkedin, Twitter, Mail } from "lucide-react"
+import SocialLinksWidget from "@/components/SocialLinksWidget"
 import ProjectCarousel from "@/components/ProjectCarousel"
 import ConstellationBackground from "../components/ConstellationBackground"
 import MicroSparks from "../components/MicroSparks"
 import ChatWidget from "../components/ChatWidget"
-
+  
 // Types
 interface Project {
   id: number
@@ -20,33 +20,10 @@ interface BioSection {
   content: string
 }
 
-interface SocialLinkProps {
-  href: string
-  icon: React.ReactNode
-  label: string
-}
-
 interface BioSectionProps {
   title: string
   content: string
   index: number
-}
-
-// Helper Components
-const SocialLink: React.FC<SocialLinkProps> = ({ href, icon, label }) => {
-  return (
-    <motion.a
-      href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="bg-gray-700 p-3 rounded-full hover:bg-gray-600 transition-colors duration-200"
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.9 }}
-    >
-      <span className="sr-only">{label}</span>
-      {icon}
-    </motion.a>
-  )
 }
 
 const BioSection: React.FC<BioSectionProps> = ({ title, content, index }) => {
@@ -329,6 +306,7 @@ export default function Home(): JSX.Element {
     <div className="min-h-screen relative">
       <ConstellationBackground scrollYProgress={scrollYProgress} />
       <ChatWidget />
+      <SocialLinksWidget />
       <div className="relative">
         <header className="container mx-auto px-4 py-16 flex flex-col items-center justify-center min-h-[50vh]">
           <div className="content-glass p-8 rounded-lg backdrop-blur-md text-center max-w-3xl mx-auto">
@@ -395,21 +373,7 @@ export default function Home(): JSX.Element {
             </div>
           </section>
 
-          <section className="content-glass p-8 backdrop-blur-md max-w-3xl mx-auto text-center">
-            <h2 className="tech-text text-3xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
-              Connect with Me
-            </h2>
-            <div className="flex justify-center space-x-6">
-              <SocialLink href="https://github.com/GloryMighty" icon={<Github className="w-7 h-7" />} label="GitHub" />
-              <SocialLink
-                href="https://www.linkedin.com/in/viacheslav-mamatov-61169032b/"
-                icon={<Linkedin className="w-7 h-7" />}
-                label="LinkedIn"
-              />
-              <SocialLink href="https://twitter.com/allhopeisgo" icon={<Twitter className="w-7 h-7" />} label="Twitter" />
-              <SocialLink href="mailto:mamatovviacheslav@gmail.com" icon={<Mail className="w-7 h-7" />} label="Email" />
-            </div>
-          </section>
+
         </main>
 
         <footer className="container mx-auto px-4 py-8 text-center">
