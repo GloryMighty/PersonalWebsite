@@ -146,7 +146,7 @@ const ChatWidget: React.FC = () => {
       const initialMessage: Message = {
         id: `msg-${Date.now()}`,
         role: "assistant",
-        content: "Hello! I am Viacheslav's AI assistant. I am here to help you learn more about him and his work. How can I help you today?",
+        content: "Hello! I am VAIcheslav. I am here to help you learn more about me and my work. How can I help you today?",
         timestamp: Date.now(),
       };
       setMessages([initialMessage]);

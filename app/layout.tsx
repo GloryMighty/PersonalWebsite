@@ -9,7 +9,7 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: "Viacheslav Mamatov - Software Engineer",
+  title: "Viacheslav Mamatov - Application Developer, AI Automations",
   description: "Personal website of Viacheslav Mamatov, showcasing projects in React, Vite, Python, and Streamlit.",
 }
 
