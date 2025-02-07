@@ -303,6 +303,23 @@ export default function Home(): JSX.Element {
   const opacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
 
 // Handle resize for mobile devices and adjust styling accordingly, making titles and headline smaller
+const handleResize = () => {
+  if (window.innerWidth < 768) {
+    // For mobile, make titles and headline smaller
+    document.documentElement.style.setProperty('--title-size', '4rem');
+    document.documentElement.style.setProperty('--headline-size', '2.5rem');
+  } else {
+    // For desktop, reset sizes
+    document.documentElement.style.setProperty('--title-size', '6rem');
+    document.documentElement.style.setProperty('--headline-size', '4rem');
+  }
+}
+// Add event listener for resize
+useEffect(() => {
+  handleResize(); // Call it once on mount
+  window.addEventListener('resize', handleResize); // Call it on resize
+  return () => window.removeEventListener('resize', handleResize); // Cleanup
+}, []);
 
 return (
     <div className="min-h-screen relative">
