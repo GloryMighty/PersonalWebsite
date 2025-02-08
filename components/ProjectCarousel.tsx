@@ -55,7 +55,7 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({ images, title }) => {
   }
 
   return (
-    <div className="relative w-full h-[315px] bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden group">
+    <div className="relative w-full h-[500px] bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl overflow-hidden group">
       <div className="absolute inset-0 flex items-center justify-center">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
@@ -86,7 +86,7 @@ const ProjectCarousel: React.FC<ProjectCarouselProps> = ({ images, title }) => {
               src={images[currentIndex]}
               alt={`${title} screenshot ${currentIndex + 1}`}
               fill
-              className="object-contain p-2"
+              className="object-contain"
               priority
             />
           </motion.div>

@@ -9,6 +9,7 @@ import { useScroll } from "framer-motion"
 import { useState, useEffect } from "react"
 import SocialLinksWidget from "@/components/SocialLinksWidget"
 import ChatWidget from "@/components/ChatWidget"
+import OfferForm from "@/components/OfferForm"
 import NavigationButton from '@/components/NavigationButton'
 
 interface Project {
@@ -24,11 +25,16 @@ const projects: Project[] = [
     title: "Tinderizzer",
     description: 'An AI-powered dating coach designed to help craft the perfect messages for online dating. Leverages Google Gemini API to analyze messages, provide feedback, and boost user\'s communication skills with a fun "Rizz Score".',
     images: [
-      "/ReactScreen/Main.png",
+      "/ReactScreen/Intro.png",
+      "/ReactScreen/SignIn.png",
+      "/ReactScreen/Chat1.png",
+      "/ReactScreen/Chat2.png",
+      "/ReactScreen/Chat3.png",
+      "/ReactScreen/Chat4.png",
       "/ReactScreen/Profile.png",
       "/ReactScreen/Description.png",
       "/ReactScreen/Approach.png",
-      "/ReactScreen/Upgrade.png"
+      "/ReactScreen/Upgrade.png", 
     ]
   },
   { 
@@ -78,8 +84,11 @@ export default function ProjectsPage() {
   return (
     <div className="min-h-screen relative">
       <ConstellationBackground scrollYProgress={scrollYProgress} />
-      <SocialLinksWidget />
-      <ChatWidget />
+      <div className="fixed top-4 right-4 md:top-8 md:right-8 z-50 flex space-x-4">
+        <SocialLinksWidget />
+        <ChatWidget />
+        <OfferForm />
+      </div>
       <div className="container mx-auto py-8">
         <div className="mb-8">
           <NavigationButton href="/" label="Main Page" />
@@ -101,15 +110,15 @@ export default function ProjectsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="project-card"
+                className="project-card flex flex-col items-center"
               >
-                <div className="project-image-container">
+                <div className="project-image-container min-h-[600px] flex justify-center items-center">
                   <Image
                     src={selectedImages[project.id] || project.images[0]}
                     alt={project.title}
-                    width={1600}
-                    height={900}
-                    className="project-image object-cover w-full h-full md:w-full md:h-[500px] rounded-xl"
+                    width={2400}
+                    height={1350}
+                    className="project-image object-contain max-w-full max-h-full"
                     priority={index === 0}
                   />
                 </div>
@@ -117,11 +126,9 @@ export default function ProjectsPage() {
                   <h2 className="project-title">{project.title}</h2>
                   <p className="project-description">{project.description}</p>
                   {project.images.length > 0 && (
-                    <div className="project-gallery">
+                    <div className="project-gallery flex flex-wrap gap-2 justify-center">
                       {project.images.map((image, imgIndex) => (
                         <motion.div
-                        // Include the thumbnail in the gallery of images after selectedImages is empty
-                        // Also, add a ring to the selected image
                           onClick={() => handleFirstImage(project.id, image)}
                           onMouseEnter={() => handleThumbnailClick(project.id, image)}
                           onMouseLeave={() => setSelectedImages(prev => ({
@@ -133,17 +140,16 @@ export default function ProjectsPage() {
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.5, delay: index * 0.2 }}
-                          className={`gallery-thumbnail ${selectedImages[project.id] === image ? 'ring-2 ring-blue-500' : ''}`}                        whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.95 }}
+                          className={`gallery-thumbnail w-[100px] h-[100px] ${selectedImages[project.id] === image ? 'ring-2 ring-blue-500' : ''}`}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.98 }}
                         >
                           <Image
-                          // This is the gallery of images that includes thumbnail image. 
-                          // Also, add a ring to the selected images  
                             src={image}
                             alt={`${project.title} screenshot ${imgIndex + 1}`}
                             width={150}
                             height={150}
-                            className="thumbnail-image cursor-pointer object-cover rounded-lg"
+                            className="thumbnail-image cursor-pointer object-contain w-full h-full rounded-lg"
                           />
                         </motion.div>
                       ))}
