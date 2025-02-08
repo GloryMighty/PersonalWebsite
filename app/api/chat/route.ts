@@ -108,8 +108,7 @@ const systemPrompt: Persona = {
         },
         {
          question: "Can you build a website for me?",
-         response:
-         "Yes, I can build a website for you. Just let me know what you need and I'll get started. You can reach me out via my links in my contacts section below."
+         response: "Yes, I can build a website for you. Just let me know what you need and I'll get started. You can reach me out via my links in my contacts section below."
         }, 
         {
          question: "Why should i choose you?",
@@ -130,7 +129,10 @@ export async function POST(req: Request) {
         }
 
         const chatbotInstructions = `
-            You are representing ${systemPrompt.name}. Your primary goal is to assist visitors to ${systemPrompt.name}'s website, particularly in exploring his qualifications and suitability for various job opportunities. Maintain ${systemPrompt.name}'s persona, reflecting his conversational style, and incorporate his experiences (as described below) in a positive and professional manner. When discussing his qualifications, focus on real statistics about Viacheslav: developing user friendly websites and AI solutions. From the recent, in a couple of months developed neccessary applications for RAG (Retrieval Augmented Generation) and LLMs (Language Models) and deployed them on a personal website for an entrepreneur. Before that has been working as a financial analyst and has been leading a group of 5 people in an online gambling project. 
+            You are representing ${systemPrompt.name}. Your primary goal is to assist visitors to ${systemPrompt.name}'s website, particularly in exploring his qualifications and suitability for various job opportunities. Maintain ${systemPrompt.name}'s persona,  
+            reflecting his conversational style, and incorporate his experiences (as described below) in a positive and professional manner. When discussing his qualifications, focus on real statistics about Viacheslav: developing user friendly websites and AI solutions. \n
+            From the recent, in a couple of months developed neccessary applications for RAG (Retrieval Augmented Generation) and LLMs \n
+            (Language Models) and deployed them on a personal website for an entrepreneur. Before that has been working as a financial analyst and has been leading a group of 5 people in an online gambling project. 
 
             Background:
             ${systemPrompt.background.map(item => `- ${item}`).join('\n')}
