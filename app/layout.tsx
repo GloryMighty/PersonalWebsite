@@ -9,12 +9,15 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: '--font-space-grotesk',
 })
-
+// Add metadata and favicon.ico from the public folder
 export const metadata: Metadata = {
-  title: "Viacheslav Mamatov - Application Developer, AI Automations",
+  title: "WebDev",
   description: "Personal website of Viacheslav Mamatov, showcasing projects in React, Vite, Python, and Streamlit.",
+  icons: {
+    icon: '/favicon.ico',
+  },
 }
-
+// Root layout component
 export default function RootLayout({
   children,
 }: {
@@ -26,4 +29,3 @@ export default function RootLayout({
     </html>
   )
 }
-

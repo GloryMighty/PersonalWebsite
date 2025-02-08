@@ -46,7 +46,7 @@ const projects: Project[] = [
     id: 3, 
     title: "My Introduction", 
     description: 'Me myself and i',
-    images: ["/public/MyIntroducation/doggy.png"]
+    images: ["/MyIntroducation/doggy.png"]
   },
 ]
 // Function to render the components
