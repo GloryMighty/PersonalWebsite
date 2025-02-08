@@ -2,12 +2,14 @@
 
 "use client"
 
+import React from 'react'
 import { useState, useEffect, useRef } from "react"
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import SocialLinksWidget from "../components/SocialLinksWidget"
 import ConstellationBackground from "../components/ConstellationBackground"
 import MicroSparks from "../components/MicroSparks"
 import ChatWidget from "../components/ChatWidget"
+import NavigationButton from "../components/NavigationButton"
   
 // Types
 
@@ -300,7 +302,7 @@ return (
         <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"/>
         <link rel="icon" href="/favicon.ico" type="image/x-icon"/>
           <div className="content-glass p-8 rounded-lg backdrop-blur-md text-center max-w-3xl mx-auto">
-            <h1 className="tech-text text-6xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-100 via-white to-blue-100 animate-glow">
+            <h1 className="tech-text md:text-6xl text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-100 via-white to-blue-100 animate-glow">
               Viacheslav Mamatov
             </h1>
             <AnimatedTitle />
@@ -342,7 +344,7 @@ return (
         <footer className="container mx-auto px-4 py-8 text-center">
           <div className="content-glass p-4 backdrop-blur-md max-w-xl mx-auto">
             <p className="tech-text text-sm text-blue-200">
-              © 2025 Viacheslav Mamatov. All rights reserved.
+              2025 Viacheslav Mamatov. All rights reserved.
             </p>
           </div>
         </footer>
