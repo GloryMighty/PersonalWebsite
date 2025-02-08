@@ -1,0 +1,17 @@
+Tinderizzer - Master the Art of Online Dating with AI
+Project Description
+Tinderizzer is an AI-powered dating coach designed to help you craft the perfect messages for online dating. It analyzes your messages and your match's profile to provide feedback and suggestions for improvement, boosting your "rizz score" and helping you make better connections.
+
+Technical Features
+
+AI-Powered Message Analysis: Leverages the Google Gemini API to analyze dating messages and provide actionable feedback, improving user's communication skills. See src/components/ChatAssistant.tsx and src/utils/aiConfig.ts for details on the AI integration and prompting.
+Rizz Score: Calculates a "Rizz Score" to quantify the effectiveness of messages, providing users with a fun and engaging metric to track their progress. Implemented in src/components/RizzScore.tsx and used in src/components/ChatAssistant.tsx.
+User Authentication with Supabase: Secure user sign-up, sign-in, and session management using Supabase Auth. Protected routes are implemented using ProtectedRoute component in App.tsx to ensure only authenticated users can access core features.
+Personalized Rizz Styles: Offers different "rizz styles" (Casual, Sassy, Toxic) to tailor message suggestions to user preferences. Implemented in src/components/RizzApproaches.tsx and configurable via RizzStyleModal (src/components/modals/RizzStyleModal.tsx).
+Match Description Input: Allows users to input details about their match's profile and preferences to further personalize AI suggestions. Implemented using MatchDescriptionModal (src/components/modals/MatchDescriptionModal.tsx).
+Responsive Design: Application is designed to be fully responsive and accessible across different devices, utilizing techniques like useIsMobile hook (src/hooks/use-mobile.tsx) and MobileSidebar (src/components/MobileSidebar.tsx).
+Modern UI Components: Utilizes a rich set of UI components from Shadcn UI, ensuring a consistent and visually appealing user interface.
+Theme Switching: Supports light and dark themes for user preference, implemented using Next Themes and configured in tailwind.config.ts and src/components/ThemeToggle.tsx.
+Upgrade & Subscription Model: Includes basic structure for user upgrades and subscription plans, as seen in src/pages/Upgrade.tsx.
+Real-time Feedback: Provides users with immediate feedback and improved message suggestions, enhancing the learning and improvement process.
+Toast Notifications: Uses sonner and react-toast for non-intrusive and informative user notifications.

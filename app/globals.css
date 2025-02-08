@@ -10,7 +10,7 @@
 
 /* Project Page Styles */
 .project-card {
-  @apply bg-gray-800/90 backdrop-blur-md rounded-xl overflow-hidden shadow-xl transition-transform duration-300 hover:transform hover:scale-[1.02];
+  @apply backdrop-blur-sm rounded-xl overflow-hidden shadow-xl transition-transform duration-300 hover:transform hover:scale-[1.02];
 }
 
 .project-image-container {
@@ -89,7 +89,7 @@
   }
 
   .glass-panel {
-    @apply bg-black/70 backdrop-blur-sm;
+    @apply backdrop-blur-sm;
   }
 }
 
@@ -106,6 +106,6 @@ a, button, input, select, textarea {
 
 /* Glass Effect */
 .relative.z-10 {
-  @apply glass-panel;
+  @apply backdrop-blur-sm;
 }
 

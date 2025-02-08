@@ -1,0 +1,37 @@
+const pvLogixDescription = `
+PVLogix AI Assistant
+
+An intelligent document analysis assistant powered by Google's Gemini AI. This application helps analyze and query PDF documents, providing structured answers and insights.
+
+Features
+
+- Intelligent Document Analysis
+  - Access and parse multiple documents simultaneously
+  - Get structured, context-aware responses
+  - Compare information across documents when all of them are selected
+  - Extract key insights from PDFs
+
+- Interactive Chat Interface
+  - Natural language queries
+  - Context-aware responses
+  - Persistent chat history
+
+- File Management
+  - Upload documents directly to Google Cloud Storage
+  - Delete files with confirmation
+  - Multi-file selection
+  - File size and type validation
+
+- Security & Privacy
+  - Private deployment options
+  - Secure cloud storage
+  - Access control
+  - Environment-based configuration
+
+Technical Stack
+
+- Frontend: Streamlit
+- AI: Google Gemini AI
+- Storage: Google Cloud Storage
+- Language: Python 3.9+
+`;
