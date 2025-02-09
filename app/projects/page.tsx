@@ -198,6 +198,9 @@ const ProjectImageDisplay = ({
 
   // Render Autoparsinta with Before/After layout
   if (project.id === 1) {
+    console.log(`Rendering project ${project.title}`)
+    console.log(`Testimonial image path: ${project.testimonialImage}`)
+    
     return (
       <div className={`w-full ${projectStyle.bgColor} rounded-2xl overflow-hidden shadow-2xl p-8 relative`}>
         {/* Testimonial Section */}
@@ -209,6 +212,7 @@ const ProjectImageDisplay = ({
               width={375}
               height={188}
               className="w-full h-auto rounded-lg shadow-md object-contain"
+              unoptimized  // Add this to bypass Next.js image optimization for debugging
             />
           </div>
         )}
