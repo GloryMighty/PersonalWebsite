@@ -20,7 +20,6 @@ interface Project {
   title: string
   description: string
   images: string[]
-  testimonialImage?: string  // Optional testimonial image
 }
 
 const projects: Project[] = [
@@ -34,8 +33,7 @@ const projects: Project[] = [
       "/AutoparsintaAfter/3.png",
       "/AutoparsintaBefore/Main.png",
       "/AutoparsintaBefore/1.png"
-    ],
-    testimonialImage: "/testimonials/Autoparsinta.png"
+    ]
   },
   { 
     id: 2, 
@@ -52,8 +50,7 @@ const projects: Project[] = [
       "/ReactScreen/Description.png",
       "/ReactScreen/Approach.png",
       "/ReactScreen/Upgrade.png", 
-    ],
-    testimonialImage: "/testimonials/Tinderizzer.png"
+    ]
   },
   { 
     id: 3, 
@@ -65,7 +62,7 @@ const projects: Project[] = [
       "/StreamlitScreen/Process.png",
       "/StreamlitScreen/AIResponse.png",
       "/StreamlitScreen/Delete.png"
-    ],
+    ]
   },
   { 
     id: 4, 
@@ -199,24 +196,9 @@ const ProjectImageDisplay = ({
   // Render Autoparsinta with Before/After layout
   if (project.id === 1) {
     console.log(`Rendering project ${project.title}`)
-    console.log(`Testimonial image path: ${project.testimonialImage}`)
     
     return (
       <div className={`w-full ${projectStyle.bgColor} rounded-2xl overflow-hidden shadow-2xl p-8 relative`}>
-        {/* Testimonial Section */}
-        {project.testimonialImage && (
-          <div className="absolute top-48 right-0 transform w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
-            <Image
-              src={project.testimonialImage}
-              alt={`${project.title} Testimonial`}
-              width={375}
-              height={188}
-              className="w-full h-auto rounded-lg shadow-md object-contain"
-              unoptimized  // Add this to bypass Next.js image optimization for debugging
-            />
-          </div>
-        )}
-        
         <div className="pt-16 flex">
           <div className="w-3/5 pr-8">
             <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
@@ -323,19 +305,6 @@ const ProjectImageDisplay = ({
         <MatrixCodeBackground />
         
         <div className="relative z-10">
-          {/* Testimonial Section */}
-          {project.testimonialImage && (
-            <div className="absolute top-48 right-0 transform -translate-x-1/2 -translate-y-1/2 w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
-              <Image
-                src={project.testimonialImage}
-                alt={`${project.title} Testimonial`}
-                width={375}
-                height={188}
-                className="w-full h-auto rounded-lg shadow-md object-contain"
-              />
-            </div>
-          )}
-
           <div className="pt-16 flex">
             <div className="w-3/5 pr-8">
               <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
@@ -428,19 +397,6 @@ const ProjectImageDisplay = ({
       <MatrixCodeBackground />
       
       <div className="relative z-10">
-        {/* Testimonial Section */}
-        {project.testimonialImage && (
-          <div className="absolute top-48 right-0 transform -translate-x-1/2 -translate-y-1/2 w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
-            <Image
-              src={project.testimonialImage}
-              alt={`${project.title} Testimonial`}
-              width={500}
-              height={288}
-              className="w-full h-auto rounded-lg shadow-md object-contain"
-            />
-          </div>
-        )}
-
         <div className="pt-16 flex">
           <div className="w-3/5 pr-8">
             <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
