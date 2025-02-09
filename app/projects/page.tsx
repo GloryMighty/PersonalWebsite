@@ -20,6 +20,7 @@ interface Project {
   title: string
   description: string
   images: string[]
+  testimonialImage?: string  // Optional testimonial image
 }
 
 const projects: Project[] = [
@@ -33,7 +34,8 @@ const projects: Project[] = [
       "/AutoparsintaAfter/3.png",
       "/AutoparsintaBefore/Main.png",
       "/AutoparsintaBefore/1.png"
-    ]
+    ],
+    testimonialImage: "/testimonials/Autoparsinta.png"
   },
   { 
     id: 2, 
@@ -50,7 +52,8 @@ const projects: Project[] = [
       "/ReactScreen/Description.png",
       "/ReactScreen/Approach.png",
       "/ReactScreen/Upgrade.png", 
-    ]
+    ],
+    testimonialImage: "/testimonials/Tinderizzer.png"
   },
   { 
     id: 3, 
@@ -62,7 +65,7 @@ const projects: Project[] = [
       "/StreamlitScreen/Process.png",
       "/StreamlitScreen/AIResponse.png",
       "/StreamlitScreen/Delete.png"
-    ]
+    ],
   },
   { 
     id: 4, 
@@ -70,7 +73,7 @@ const projects: Project[] = [
     description: 'Just me',
     images: [
       "/MyIntroduction/me.png",
-      ]
+    ]
   },
 ]
 
@@ -193,21 +196,15 @@ const ProjectImageDisplay = ({
     handleFirstImage(project.id, images[newIndex])
   }
 
-  // Testimonial image mapping
-  const testimonialImages: {[key: number]: string} = {
-    1: "/testimonials/Autoparsinta.png",
-    2: "/testimonials/Tinderizzer.png"
-  }
-
   // Render Autoparsinta with Before/After layout
   if (project.id === 1) {
     return (
       <div className={`w-full ${projectStyle.bgColor} rounded-2xl overflow-hidden shadow-2xl p-8 relative`}>
         {/* Testimonial Section */}
-        {testimonialImages[project.id] && (
-          <div className="absolute top-48 right-0 transform  w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
+        {project.testimonialImage && (
+          <div className="absolute top-48 right-0 transform w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
             <Image
-              src={testimonialImages[project.id]}
+              src={project.testimonialImage}
               alt={`${project.title} Testimonial`}
               width={375}
               height={188}
@@ -323,10 +320,10 @@ const ProjectImageDisplay = ({
         
         <div className="relative z-10">
           {/* Testimonial Section */}
-          {testimonialImages[project.id] && (
+          {project.testimonialImage && (
             <div className="absolute top-48 right-0 transform -translate-x-1/2 -translate-y-1/2 w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
               <Image
-                src={testimonialImages[project.id]}
+                src={project.testimonialImage}
                 alt={`${project.title} Testimonial`}
                 width={375}
                 height={188}
@@ -428,10 +425,10 @@ const ProjectImageDisplay = ({
       
       <div className="relative z-10">
         {/* Testimonial Section */}
-        {testimonialImages[project.id] && (
+        {project.testimonialImage && (
           <div className="absolute top-48 right-0 transform -translate-x-1/2 -translate-y-1/2 w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
             <Image
-              src={testimonialImages[project.id]}
+              src={project.testimonialImage}
               alt={`${project.title} Testimonial`}
               width={500}
               height={288}
