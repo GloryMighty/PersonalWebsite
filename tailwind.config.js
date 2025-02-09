@@ -64,7 +64,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
-    require('tailwind-scrollbar')({ nocompatible: true }),
+    require('tailwind-scrollbar'),
     function({ addComponents }) {
       addComponents({
         '.content-glass': {
