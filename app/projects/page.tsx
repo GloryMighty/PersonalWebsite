@@ -13,7 +13,6 @@ import NavigationButton from '@/components/NavigationButton'
 import SocialLinksWidget from "@/components/SocialLinksWidget"
 import ChatWidget from "@/components/ChatWidget"
 import OfferForm from "@/components/OfferForm"
-import { FaArrowRight } from 'react-icons/fa'
 
 // Project data and types
 interface Project {
@@ -27,7 +26,7 @@ const projects: Project[] = [
   { 
     id: 1, 
     title: "Autoparsinta", 
-    description: 'A web application for a car service business, built using modern web technologies. It is developed using React and TypeScript for the frontend, ensuring type safety and component reusability. The user interface is implemented with Shadcn-ui, a collection of accessible and reusable UI components, styled with Tailwind CSS for responsiveness and customization. The application utilizes Vite as a build tool, providing fast development and optimized production builds. It includes multi-language support, offering content in Finnish, English, Arabic, and Swedish, and is configured for deployment on Vercel. The application handles google maps widget, providing interactive maps for location tracking and direction finding and has a review widget as well.',
+    description: 'A web application for a car service business, built using modern web technologies. -React and Typescript for frontend, ensuring type safety and component reusability. The user interface is implemented with Shadcn-ui, styled with Tailwind CSS for responsiveness and customization. The application utilizes Vite as a build tool, providing fast development and optimized production builds. It includes multi-language support, offering content in Finnish, English, Arabic, and Swedish, and is configured for deployment on hosting platforms. The application handles google maps widget, providing interactive maps for location tracking and direction finding and has a review widget as well.',
     images: [
       "/AutoparsintaAfter/Main.png",
       "/AutoparsintaAfter/2.png",
@@ -78,13 +77,13 @@ const projects: Project[] = [
 // Define consistent project styles with consistent, descriptive naming
 const PROJECT_STYLES = {
   PVLOGIX: {
-    bgColor: 'bg-gradient-to-br from-blue-900/50 via-blue-800/50 to-blue-700/50',
-    titleColor: 'text-blue-300',
-    descColor: 'text-blue-100',
-    borderColor: 'border-blue-600',
-    hoverEffect: 'hover:skew-y-3 hover:shadow-blue-200/50',
+    bgColor: 'bg-gray-900/50',
+    titleColor: 'text-gray-200',
+    descColor: 'text-gray-300',
+    borderColor: 'border-gray-600',
+    hoverEffect: 'hover:skew-y-3 hover:shadow-gray-200/50',
     gridLayout: 'grid grid-cols-1 md:grid-cols-2 gap-6',
-    thumbnailLayout: 'flex space-x-4 overflow-x-auto py-4 px-2 scrollbar-thin scrollbar-thumb-blue-500/50 scrollbar-track-blue-900/50'
+    thumbnailLayout: 'flex space-x-4 overflow-x-auto py-4 px-2 scrollbar-thin scrollbar-thumb-gray-500/50 scrollbar-track-gray-900/50'
   },
 }
 
@@ -142,14 +141,14 @@ const ParallaxSeparator = ({ scrollYProgress }: { scrollYProgress: MotionValue<n
       }}
     >
       {/* Gradient background with subtle movement */}
-      <div className="absolute inset-0 bg-gradient-to-r from-blue-900/50 via-purple-900/50 to-green-900/50 blur-2xl animate-slow-pulse"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-gray-900/50 via-gray-800/50 to-gray-700/50 blur-2xl animate-slow-pulse"></div>
       
       {/* Floating code-like elements */}
       <div className="absolute inset-0 pointer-events-none">
         {codeLines.map((codeLine, index) => (
           <motion.div
             key={index}
-            className="absolute text-green-500/20 font-mono text-xs"
+            className="absolute text-gray-500/20 font-mono text-xs"
             style={{
               left: `${(index * 7.5) % 100}%`, // Deterministic positioning
               top: `${(index * 5.5) % 100}%`, // Consistent vertical placement
@@ -180,23 +179,86 @@ const ProjectImageDisplay = ({
   // Determine project-specific styles
   const projectStyle = PROJECT_STYLES.PVLOGIX
 
+  // Track current image index
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
+
+  // Function to navigate images
+  const navigateImage = (direction: 'prev' | 'next') => {
+    const images = project.images
+    const newIndex = direction === 'prev' 
+      ? (currentImageIndex - 1 + images.length) % images.length
+      : (currentImageIndex + 1) % images.length
+    
+    setCurrentImageIndex(newIndex)
+    handleFirstImage(project.id, images[newIndex])
+  }
+
+  // Testimonial image mapping
+  const testimonialImages: {[key: number]: string} = {
+    1: "/testimonials/Autoparsinta.png",
+    2: "/testimonials/Tinderizzer.png"
+  }
+
   // Render Autoparsinta with Before/After layout
   if (project.id === 1) {
     return (
       <div className={`w-full ${projectStyle.bgColor} rounded-2xl overflow-hidden shadow-2xl p-8 relative`}>
-        <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
-        <p className={`${projectStyle.descColor} mb-8`}>{project.description}</p>
+        {/* Testimonial Section */}
+        {testimonialImages[project.id] && (
+          <div className="absolute top-48 right-0 transform  w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
+            <Image
+              src={testimonialImages[project.id]}
+              alt={`${project.title} Testimonial`}
+              width={375}
+              height={188}
+              className="w-full h-auto rounded-lg shadow-md object-contain"
+            />
+          </div>
+        )}
         
-        {/* Main Image Display */}
-        <div className="project-image-container min-h-[600px] flex justify-center items-center mb-8">
-          <Image
-            src={selectedImages[project.id] || project.images[0]}
-            alt={project.title}
-            width={2400}
-            height={1350}
-            className="project-image object-contain max-w-full max-h-full rounded-lg shadow-xl"
-            priority
-          />
+        <div className="pt-16 flex">
+          <div className="w-3/5 pr-8">
+            <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
+            <p className={`${projectStyle.descColor} mb-8 text-lg leading-relaxed`}>{project.description}</p>
+          </div>
+          <div className="w-2/5">
+            {/* Placeholder for future content or additional information */}
+          </div>
+        </div>
+
+        {/* Main Image Display with Navigation */}
+        <div className="project-image-container min-h-[600px] flex justify-center items-center mb-8 relative group">
+          <div className="absolute inset-0 bg-gray-800/20 rounded-3xl -z-10 blur-sm group-hover:blur-0 transition-all duration-300"></div>
+          <div className="border-8 border-gray-700/50 rounded-3xl p-4 shadow-2xl shadow-gray-900/50 group-hover:shadow-gray-700/50 transition-all duration-300">
+            <button 
+              onClick={() => navigateImage('prev')} 
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 
+                bg-black/20 text-white/80 p-2 rounded-full 
+                opacity-0 group-hover:opacity-100 
+                transition-all duration-300 ease-in-out 
+                hover:bg-black/50"
+            >
+              ←
+            </button>
+            <Image
+              src={selectedImages[project.id] || project.images[currentImageIndex]}
+              alt={project.title}
+              width={2400}
+              height={1350}
+              className="project-image object-contain max-w-full max-h-full rounded-xl shadow-xl group"
+              priority
+            />
+            <button 
+              onClick={() => navigateImage('next')} 
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 
+                bg-black/20 text-white/80 p-2 rounded-full 
+                opacity-0 group-hover:opacity-100 
+                transition-all duration-300 ease-in-out 
+                hover:bg-black/50"
+            >
+              →
+            </button>
+          </div>
         </div>
 
         <div className={projectStyle.gridLayout}>
@@ -253,67 +315,211 @@ const ProjectImageDisplay = ({
   }
 
   // Render other projects with standard layout
+  if (project.id === 2) {
+    return (
+      <div className={`w-full ${projectStyle.bgColor} rounded-2xl overflow-hidden shadow-2xl p-8 relative`}>
+        {/* Matrix-like code background */}
+        <MatrixCodeBackground />
+        
+        <div className="relative z-10">
+          {/* Testimonial Section */}
+          {testimonialImages[project.id] && (
+            <div className="absolute top-48 right-0 transform -translate-x-1/2 -translate-y-1/2 w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
+              <Image
+                src={testimonialImages[project.id]}
+                alt={`${project.title} Testimonial`}
+                width={375}
+                height={188}
+                className="w-full h-auto rounded-lg shadow-md object-contain"
+              />
+            </div>
+          )}
+
+          <div className="pt-16 flex">
+            <div className="w-3/5 pr-8">
+              <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
+              <p className={`${projectStyle.descColor} mb-8 text-lg leading-relaxed`}>{project.description}</p>
+            </div>
+            <div className="w-2/5">
+              {/* Placeholder for future content or additional information */}
+            </div>
+          </div>
+
+          {/* Main Image Display with Navigation */}
+          <div className="project-image-container min-h-[600px] flex justify-center items-center mb-8 relative group">
+            <div className="absolute inset-0 bg-gray-800/20 rounded-3xl -z-10 blur-sm group-hover:blur-0 transition-all duration-300"></div>
+            <div className="border-8 border-gray-700/50 rounded-3xl p-4 shadow-2xl shadow-gray-900/50 group-hover:shadow-gray-700/50 transition-all duration-300">
+              <button 
+                onClick={() => navigateImage('prev')} 
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 
+                  bg-black/20 text-white/80 p-2 rounded-full 
+                  opacity-80 group-hover:opacity-100 
+                  transition-all duration-300 ease-in-out 
+                  hover:bg-black/50"
+              >
+                ←
+              </button>
+              <Image
+                src={selectedImages[project.id] || project.images[currentImageIndex]}
+                alt={project.title}
+                width={2400}
+                height={1350}
+                className="project-image object-contain max-w-full max-h-full rounded-xl shadow-xl group"
+                priority
+              />
+              <button 
+                onClick={() => navigateImage('next')} 
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 
+                  bg-black/20 text-white/80 p-2 rounded-full 
+                  opacity-80 group-hover:opacity-100 
+                  transition-all duration-300 ease-in-out 
+                  hover:bg-black/50"
+              >
+                →
+              </button>
+            </div>
+          </div>
+
+          {/* Image Gallery with Smooth Collision Effect */}
+          <div className={`${projectStyle.thumbnailLayout} space-x-4 py-4 px-2 
+            scroll-smooth snap-x snap-mandatory overflow-x-auto 
+            hover:scrollbar-thumb-gray-600/50 scrollbar-thin scrollbar-track-transparent`}>
+            {project.images.map((image, imgIndex) => (
+              <motion.div
+                key={imgIndex}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ 
+                  duration: 0.3, 
+                  type: "spring", 
+                  stiffness: 100 
+                }}
+                viewport={{ once: true, amount: 0.5 }}
+                className={`flex-shrink-0 snap-center 
+                  ${selectedImages[project.id] === image 
+                    ? `border-4 ${projectStyle.borderColor}` 
+                    : `border-2 ${projectStyle.borderColor} opacity-70`}
+                  rounded-lg shadow-lg transform transition 
+                  ${projectStyle.hoverEffect} 
+                  w-[200px] h-[150px] overflow-hidden`}
+              >
+                <Image
+                  src={image}
+                  alt={`${project.title} screenshot ${imgIndex + 1}`}
+                  width={200}
+                  height={150}
+                  className="w-full h-full object-cover"
+                  onClick={() => handleFirstImage(project.id, image)}
+                  onMouseEnter={() => handleThumbnailClick(project.id, image)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Render other projects with standard layout
   return (
     <div className={`w-full ${projectStyle.bgColor} rounded-2xl overflow-hidden shadow-2xl p-8 relative`}>
       {/* Matrix-like code background */}
       <MatrixCodeBackground />
       
       <div className="relative z-10">
-        <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
-        <p className={`${projectStyle.descColor} mb-8`}>{project.description}</p>
-        
-        {/* Main Image Display */}
-        <div className="project-image-container min-h-[600px] flex justify-center items-center mb-8">
-          <Image
-            src={selectedImages[project.id] || project.images[0]}
-            alt={project.title}
-            width={2400}
-            height={1350}
-            className="project-image object-contain max-w-full max-h-full rounded-lg shadow-xl"
-            priority
-          />
+        {/* Testimonial Section */}
+        {testimonialImages[project.id] && (
+          <div className="absolute top-48 right-0 transform -translate-x-1/2 -translate-y-1/2 w-60 bg-gray-900/30 rounded-xl p-2 shadow-lg z-10">
+            <Image
+              src={testimonialImages[project.id]}
+              alt={`${project.title} Testimonial`}
+              width={500}
+              height={288}
+              className="w-full h-auto rounded-lg shadow-md object-contain"
+            />
+          </div>
+        )}
+
+        <div className="pt-16 flex">
+          <div className="w-3/5 pr-8">
+            <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
+            <p className={`${projectStyle.descColor} mb-8 text-lg leading-relaxed`}>{project.description}</p>
+          </div>
+          <div className="w-2/5">
+            {/* Placeholder for future content or additional information */}
+          </div>
         </div>
 
-        {/* Image Gallery */}
-        <div className={projectStyle.thumbnailLayout}>
-          {project.images.map((image, imgIndex) => (
+        {/* Main Image Display with Navigation */}
+        <div className="project-image-container min-h-[600px] flex justify-center items-center mb-8 relative group">
+          <div className="absolute inset-0 bg-gray-800/20 rounded-3xl -z-10 blur-sm group-hover:blur-0 transition-all duration-300"></div>
+          <div className="border-8 border-gray-700/50 rounded-3xl p-4 shadow-2xl shadow-gray-900/50 group-hover:shadow-gray-700/50 transition-all duration-300">
+            <button 
+              onClick={() => navigateImage('prev')} 
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 
+                bg-black/20 text-white/80 p-2 rounded-full 
+                opacity-80 group-hover:opacity-100 
+                transition-all duration-300 ease-in-out 
+                hover:bg-black/50"
+            >
+              ←
+            </button>
             <Image
+              src={selectedImages[project.id] || project.images[currentImageIndex]}
+              alt={project.title}
+              width={2400}
+              height={1350}
+              className="project-image object-contain max-w-full max-h-full rounded-xl shadow-xl group"
+              priority
+            />
+            <button 
+              onClick={() => navigateImage('next')} 
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 
+                bg-black/20 text-white/80 p-2 rounded-full 
+                opacity-80 group-hover:opacity-100 
+                transition-all duration-300 ease-in-out 
+                hover:bg-black/50"
+            >
+              →
+            </button>
+          </div>
+        </div>
+
+        {/* Image Gallery with Smooth Collision Effect */}
+        <div className={`${projectStyle.thumbnailLayout} space-x-4 py-4 px-2 
+          scroll-smooth snap-x snap-mandatory overflow-x-auto 
+          hover:scrollbar-thumb-gray-600/50 scrollbar-thin scrollbar-track-transparent`}>
+          {project.images.map((image, imgIndex) => (
+            <motion.div
               key={imgIndex}
-              src={image}
-              alt={`${project.title} screenshot ${imgIndex + 1}`}
-              width={200}
-              height={150}
-              className={`rounded-lg shadow-lg transform transition cursor-pointer flex-shrink-0
-                ${projectStyle.hoverEffect} 
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ 
+                duration: 0.3, 
+                type: "spring", 
+                stiffness: 100 
+              }}
+              viewport={{ once: true, amount: 0.5 }}
+              className={`flex-shrink-0 snap-center 
                 ${selectedImages[project.id] === image 
                   ? `border-4 ${projectStyle.borderColor}` 
                   : `border-2 ${projectStyle.borderColor} opacity-70`}
-                w-[200px] h-[150px] object-cover`}
-              onClick={() => handleFirstImage(project.id, image)}
-              onMouseEnter={() => handleThumbnailClick(project.id, image)}
-            />
+                rounded-lg shadow-lg transform transition 
+                ${projectStyle.hoverEffect} 
+                w-[200px] h-[150px] overflow-hidden`}
+            >
+              <Image
+                src={image}
+                alt={`${project.title} screenshot ${imgIndex + 1}`}
+                width={200}
+                height={150}
+                className="w-full h-full object-cover"
+                onClick={() => handleFirstImage(project.id, image)}
+                onMouseEnter={() => handleThumbnailClick(project.id, image)}
+              />
+            </motion.div>
           ))}
         </div>
-
-        {/* Testimonial Section */}
-        {project.id === 2 && (
-          <div className="mt-12 flex justify-center">
-            <div className="max-w-4xl w-full">
-              <h3 className={`text-2xl font-semibold ${projectStyle.titleColor} mb-6 text-center`}>
-                Testimonial
-              </h3>
-              <div className="bg-blue-900/30 rounded-2xl p-6 shadow-lg">
-                <Image
-                  src="/testimonials/Tinderizzer.png"
-                  alt="Tinderizzer Testimonial"
-                  width={1200}
-                  height={600}
-                  className="w-full h-auto rounded-xl shadow-xl object-contain"
-                />
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   )
@@ -364,7 +570,7 @@ export default function ProjectsPage() {
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="tech-text text-4xl md:text-6xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-white via-blue-200 to-white drop-shadow-lg"
+            className="tech-text text-4xl md:text-6xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-white drop-shadow-lg"
           >
             My Projects
           </motion.h1>
