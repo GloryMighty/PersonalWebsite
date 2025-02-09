@@ -11,12 +11,12 @@ export default function NavigationButton({ href, label = 'Back' }: NavigationBut
   return (
     <Link 
       href={href} 
-      className="group flex items-center space-x-3 text-gray-300 hover:text-white 
+      className="fixed top-4 left-4 z-50 group flex items-center space-x-3 text-gray-300 hover:text-white 
                  transition-all duration-300 ease-in-out"
       aria-label={label}
     >
-      <div className="p-2 rounded-full bg-gray-800/50 backdrop-blur-sm 
-                    group-hover:bg-gray-700/60 border border-gray-700/50
+      <div className="p-2 rounded-full bg-gray-800/30 backdrop-blur-sm 
+                    group-hover:bg-gray-700/40 border border-gray-700/30
                     transition-all duration-300 ease-in-out 
                     shadow-lg shadow-gray-900/20">
         <ArrowLeftIcon 
