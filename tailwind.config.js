@@ -24,16 +24,38 @@ module.exports = {
       animation: {
         'twinkle': 'twinkle 4s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite',
+        'matrix-fall': 'matrixFall 5s linear infinite',
+        'slow-pulse': 'slowPulse 10s ease-in-out infinite'
       },
       keyframes: {
         twinkle: {
-          '0%, 100%': { opacity: 0.2 },
-          '50%': { opacity: 0.7 },
+          '0%, 100%': { opacity: '0.7' },
+          '50%': { opacity: '1' },
         },
         glow: {
           '0%, 100%': { textShadow: '0 0 4px rgba(255,255,255,0.1)' },
           '50%': { textShadow: '0 0 20px rgba(255,255,255,0.3)' },
         },
+        matrixFall: {
+          '0%': { 
+            transform: 'translateY(-10vh)', 
+            opacity: '0.1' 
+          },
+          '100%': { 
+            transform: 'translateY(110vh)', 
+            opacity: '0.8' 
+          },
+        },
+        slowPulse: {
+          '0%, 100%': { 
+            opacity: '0.7',
+            transform: 'scale(1)'
+          },
+          '50%': { 
+            opacity: '0.9',
+            transform: 'scale(1.05)'
+          }
+        }
       },
       letterSpacing: {
         'techwide': '0.15em',
@@ -42,6 +64,7 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/aspect-ratio'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
     function({ addComponents }) {
       addComponents({
         '.content-glass': {
