@@ -3,16 +3,15 @@
 "use client"
 
 // Framer Motion and React imports
-import { motion, useScroll, useTransform, MotionValue } from 'framer-motion'
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { motion, useScroll, useMotionValue, MotionValue } from 'framer-motion'
 import Image from 'next/image'
 
 // Import other necessary components and types
 import ConstellationBackground from "@/components/ConstellationBackground"
-import NavigationButton from '@/components/NavigationButton'
 import SocialLinksWidget from "@/components/SocialLinksWidget"
 import ChatWidget from "@/components/ChatWidget"
-import OfferForm from "@/components/OfferForm"
+import Shevrons from "@/components/Shevrons"
 
 // Project data and types
 interface Project {
@@ -32,8 +31,8 @@ interface Project {
 const projects: Project[] = [
   { 
     id: 1, 
-    title: "Autoparsinta", 
-    description: 'A web application for a car service business, built using modern web technologies. It includes multi-language support, offering content in Finnish, English, Arabic, and Swedish, and is configured for deployment on hosting platforms. The application handles google maps widget, providing interactive maps for location tracking and direction finding and has a review widget as well.',
+    title: "AUTOPARSINTA", 
+    description: 'A web application for a car service business, built using modern web technologies. It includes multi-language support, offering content in Finnish, English, Arabic, and Swedish, and is hosted online within 2 days. The application handles google maps widget, providing interactive maps for location tracking and direction finding and has a review widget as well.',
     images: [
       "/AutoparsintaAfter/Main.png",
       "/AutoparsintaAfter/2.png",
@@ -47,14 +46,14 @@ const projects: Project[] = [
     ],
     testimonial: {
       text: "Bringing my garage's website to this millenia was super easy and fast. The quality and the functionality of the website is exactly what I wanted! ",
-      author: "Markus Ketonen",
+      author: "MARKUS KETONEN",
       role: "Owner, Autoparsinta",
       image: "/Testimonials/Autoparsinta.jpg"
     }
   },
   { 
     id: 2, 
-    title: "Tinderizzer",
+    title: "TINDERIZZER",
     description: 'An AI-powered dating coach designed to help craft the perfect messages for online dating. Leverages Google Gemini API to analyze messages, provide feedback, and boost user\'s communication skills with a fun "Rizz Score".',
     images: [
       "/ReactScreen/Intro.png",
@@ -76,14 +75,14 @@ const projects: Project[] = [
     ],
     testimonial: {
       text: "Smoothly executed with an unique idea, Tinderizzer completely changed my approach to online dating. The AI feedback is incredibly insightful and has boosted my confidence.",
-      author: "Batu",
+      author: "BATUHAN",
       role: "User, Tinderizzer",
       image: "/Testimonials/Tinderizzer.png"
     }
   },
   { 
     id: 3, 
-    title: "PVLogix AI Assistant", 
+    title: "COMPLEX PDF AI", 
     description: 'An intelligent document analysis assistant powered by Google\'s Gemini AI. Helps analyze and query PDF documents, providing structured answers and insights across multiple files.',
     images: [
       "/StreamlitScreen/Main.png",
@@ -99,10 +98,10 @@ const projects: Project[] = [
       { name: 'PDF.js', icon: '📄' }
     ],
     testimonial: {
-      text: "PVLogix AI Assistant has revolutionized my document analysis workflow. The ability to query multiple PDFs and get concise insights is a game-changer for my research.",
-      author: "Dr. Elena Rodriguez",
-      role: "Research Scientist",
-      image: "/Testimonials/PVLogix.jpg"
+      text: "Complex PDF AI has revolutionized my document analysis workflow. The ability to query multiple PDFs and get concise insights is a game-changer for my research.",
+      author: "Moe",
+      role: "User",
+      image: "/Testimonials/PDF.png"
     }
   },
   { 
@@ -157,51 +156,112 @@ const MatrixCodeBackground = () => {
   )
 }
 
-// Parallax Separator Component
-const ParallaxSeparator = ({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) => {
-  // Create consistent random code lines using a deterministic method
-  const codeLines = Array.from({ length: 20 }, (_, index) => {
-    // Use a consistent seed based on the index to generate the same "random" binary string
-    const seed = index * 1.618; // Golden ratio as a consistent seed
-    const randomBinary = Math.abs(Math.sin(seed)).toString(2).slice(2, 12).padStart(10, '0')
-    return randomBinary
-  })
-
-  // Create parallax transformations
-  const translateY = useTransform(scrollYProgress, [0, 1], ['0%', '100%'])
-  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1.2])
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0])
+// Spark and Chevron Visual Component
+const ProjectSeparator = () => {
+  // Generate random spark positions and intensities
+  const sparks = Array.from({ length: 10 }, (_, i) => ({
+    left: `${Math.random() * 100}%`,
+    top: `${Math.random() * 100}%`,
+    size: `${Math.random() * 10 + 2}px`,
+    delay: `${Math.random() * 2}s`,
+    duration: `${Math.random() * 3 + 1}s`,
+    color: ['cyan', 'blue', 'purple'][Math.floor(Math.random() * 3)]
+  }))
 
   return (
-    <motion.div 
-      className="w-full h-[200px] relative overflow-hidden my-16"
-      style={{ 
-        translateY, 
-        scale, 
-        opacity 
-      }}
-    >
-      {/* Gradient background with subtle movement */}
-      <div className="absolute inset-0 bg-gradient-to-r from-gray-900/50 via-gray-800/50 to-gray-700/50 blur-2xl animate-slow-pulse"></div>
+    <div className="relative w-full h-24 overflow-hidden">
+      {/* Sparks */}
+      {sparks.map((spark, index) => (
+        <div 
+          key={index} 
+          className={`
+            absolute 
+            rounded-full 
+            bg-${spark.color}-500 
+            opacity-50 
+            animate-pulse 
+            blur-sm
+          `}
+          style={{
+            left: spark.left,
+            top: spark.top,
+            width: spark.size,
+            height: spark.size,
+            animationDelay: spark.delay,
+            animationDuration: spark.duration
+          }}
+        />
+      ))}
       
-      {/* Floating code-like elements */}
-      <div className="absolute inset-0 pointer-events-none">
-        {codeLines.map((codeLine, index) => (
+      {/* Chevron */}
+      <div className="absolute inset-x-0 bottom-0 flex justify-center items-center">
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          viewBox="0 0 24 24" 
+          className="w-12 h-12 text-cyan-500 opacity-50 animate-bounce"
+        >
+          <path 
+            fill="currentColor" 
+            d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
+          />
+        </svg>
+      </div>
+    </div>
+  )
+}
+
+// Modernized Stack Component
+const TechStack = ({ stack }: { stack?: { name: string, icon: string }[] }) => {
+  if (!stack || stack.length === 0) return null;
+
+  return (
+    <div className="mt-4 p-4 bg-gray-900/50 rounded-xl border border-cyan-500/30 shadow-lg">
+      <h3 className="text-lg font-semibold text-cyan-300 mb-3 text-center">
+        Technology Stack
+      </h3>
+      <div className="flex flex-wrap justify-center gap-4">
+        {stack.map((tech, index) => (
           <motion.div
-            key={index}
-            className="absolute text-gray-500/20 font-mono text-xs"
-            style={{
-              left: `${(index * 7.5) % 100}%`, // Deterministic positioning
-              top: `${(index * 5.5) % 100}%`, // Consistent vertical placement
-              rotate: `${(index * 18) % 360}deg`, // Consistent rotation
-              scale: useTransform(scrollYProgress, [0, 1], [0.5, 1.5])
+            key={tech.name}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ 
+              opacity: 1, 
+              scale: 1,
+              rotate: index % 2 === 0 ? [0, -5, 5, 0] : [0, 5, -5, 0]
             }}
+            transition={{ 
+              duration: 0.5, 
+              delay: index * 0.1,
+              type: "spring",
+              stiffness: 300
+            }}
+            whileHover={{ 
+              scale: 1.1,
+              rotate: 0,
+              transition: { duration: 0.2 }
+            }}
+            className="
+              flex flex-col items-center justify-center 
+              p-3 rounded-lg 
+              bg-gray-800/70 
+              border border-cyan-500/30
+              hover:border-cyan-500/70
+              hover:bg-gray-800/90
+              transition-all duration-300
+              cursor-pointer
+              group
+            "
           >
-            {codeLine}
+            <span className="text-3xl mb-2 group-hover:text-cyan-300 transition-colors">
+              {tech.icon}
+            </span>
+            <span className="text-sm text-gray-300 group-hover:text-cyan-200 transition-colors">
+              {tech.name}
+            </span>
           </motion.div>
         ))}
       </div>
-    </motion.div>
+    </div>
   )
 }
 
@@ -210,12 +270,14 @@ const ProjectImageDisplay = ({
   project, 
   selectedImages, 
   handleFirstImage, 
-  handleThumbnailClick 
+  handleThumbnailClick,
+  isLastProject 
 }: { 
   project: Project, 
   selectedImages: {[key: number]: string}, 
   handleFirstImage: (projectId: number, imageSrc: string) => void,
-  handleThumbnailClick: (projectId: number, imageSrc: string) => void 
+  handleThumbnailClick: (projectId: number, imageSrc: string) => void,
+  isLastProject?: boolean 
 }) => {
   // Determine project-specific styles
   const projectStyle = PROJECT_STYLES.PVLOGIX
@@ -235,40 +297,53 @@ const ProjectImageDisplay = ({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col space-y-8">
       {/* Content Section */}
       <div className="flex mb-8">
         {/* Left Column: Text and Stack */}
-        <div className="w-1/2 pr-8">
-          <h2 className={`text-4xl font-bold ${projectStyle.titleColor} mb-6`}>{project.title}</h2>
-          <p className={`${projectStyle.descColor} mb-8 text-lg leading-relaxed`}>{project.description}</p>
+        <div className="w-1/2 pr-8 space-y-4 relative group pl-4">
+          <h2 className={`
+            text-4xl font-bold tracking-tight 
+            bg-clip-text text-transparent 
+            bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 
+            animate-text-shimmer
+            mb-6 
+            transition-all duration-300 
+            group-hover:scale-[1.02] 
+            group-hover:brightness-110
+            -ml-4 
+            pl-4 
+            border-l-4 border-cyan-500
+          `}>{project.title}</h2>
+          <p className={`
+            ${projectStyle.descColor} 
+            text-lg leading-relaxed 
+            bg-opacity-50 
+            backdrop-blur-sm 
+            border-l-6 border-cyan-500 
+            pl-6 
+            -ml-4 
+            transition-all duration-300 
+            hover:border-opacity-100 
+            hover:shadow-lg 
+            hover:bg-gray-800/70
+          `}>{project.description}</p>
           
           {project.stack && (
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              {project.stack.map((stackItem, index) => (
-                <div 
-                  key={index} 
-                  className="flex items-center bg-gray-800/50 text-gray-200 py-1 px-2 rounded-md text-sm gap-2"
-                  title={stackItem.name}
-                >
-                  <span className="text-lg mr-1">{stackItem.icon}</span>
-                  <span className="hidden md:inline">{stackItem.name}</span>
-                </div>
-              ))}
-            </div>
+            <TechStack stack={project.stack} />
           )}
         </div>
 
         {/* Right Column: Testimonial */}
         <div className="w-1/2 pl-8 flex flex-col justify-center">
           {project.testimonial && (
-            <div className="bg-gray-900/30 rounded-xl p-6 ml-4 flex flex-col items-center">
+            <div className="bg-blue-1000/30 rounded-xl p-6 ml-4 flex flex-col items-center">
               <Image 
                 src={project.testimonial.image} 
                 alt={project.testimonial.author} 
                 width={120} 
                 height={120} 
-                className="rounded-full mb-4 border-4 border-gray-700"
+                className="rounded-full mb-4 border-4 border-blue-700"
               />
               <div className="text-center">
                 <p className="italic text-gray-300 mb-2">"{project.testimonial.text}"</p>
@@ -343,15 +418,14 @@ const ProjectImageDisplay = ({
           ))}
         </div>
       </div>
+      {/* Only add separator if it's not the last project */}
+      {!isLastProject && <ProjectSeparator />}
     </div>
   )
 }
 
 // Main Projects Page Component
 export default function ProjectsPage() {
-  // Track scroll progress for background animation and parallax
-  const { scrollYProgress } = useScroll()
-  
   // Manage selected images for each project
   const [selectedImages, setSelectedImages] = useState<{[key: number]: string}>({})
 
@@ -372,58 +446,51 @@ export default function ProjectsPage() {
   }
   
   return (
-    <div className="min-h-screen relative">
-      <ConstellationBackground scrollYProgress={scrollYProgress} />
-      
+    <div className="pt-24 min-h-screen flex flex-col items-center justify-start">
+      <motion.h1 
+        initial={{ opacity: 0, y: -50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-8 text-gray-800 dark:text-gray-200"
+      >
+        GALLERY
+      </motion.h1>
+
+      {projects.map((project, index) => (
+        <React.Fragment key={project.id}>
+          <ProjectImageDisplay 
+            project={project} 
+            selectedImages={selectedImages}
+            handleFirstImage={handleFirstImage}
+            handleThumbnailClick={handleThumbnailClick}
+            isLastProject={index === projects.length - 1}
+          />
+          {project.title === "My Introduction" && (
+            <div className="flex flex-col items-center justify-center mt-8 space-y-4">
+              <p className="text-xl text-cyan-300 font-medium text-center animate-pulse">
+                Have more questions about me? Don&apos;t hesitate to ask VAI
+              </p>
+              <div className="animate-slow-bounce">
+                <Shevrons 
+                  direction="right" 
+                  variant="triple" 
+                  size={48} 
+                  className="text-cyan-500 opacity-70 hover:opacity-100 transition-opacity duration-300"
+                />
+              </div>
+            </div>
+          )}
+        </React.Fragment>
+      ))}
+
       {/* Fixed widgets */}
       <div className="fixed top-4 right-4 md:top-8 md:right-8 z-50 flex space-x-4">
         <SocialLinksWidget />
         <ChatWidget />
-        <OfferForm />
       </div>
-      
-      <div className="container mx-auto py-8">
-        <div className="mb-8">
-          <NavigationButton href="/" label="Main Page" />
-        </div>
-        
-        <main className="relative z-10">
-          {/* Page Title */}
-          <motion.h1 
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="tech-text text-4xl md:text-6xl font-bold mb-12 text-center bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-white drop-shadow-lg"
-          >
-            My Projects
-          </motion.h1>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 gap-16 max-w-6xl mx-auto px-6">
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                className="project-card flex flex-col items-center"
-              >
-                <ProjectImageDisplay 
-                  project={project} 
-                  selectedImages={selectedImages}
-                  handleFirstImage={handleFirstImage}
-                  handleThumbnailClick={handleThumbnailClick}
-                />
-                
-                {/* Add Parallax Separator (except after the last project) */}
-                {index < projects.length - 1 && (
-                  <ParallaxSeparator scrollYProgress={scrollYProgress} />
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </main>
-      </div>
+      {/* Background */}
+      <ConstellationBackground scrollYProgress={useMotionValue(0)} />
     </div>
   )
 }

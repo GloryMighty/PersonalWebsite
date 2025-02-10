@@ -8,7 +8,10 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        // Prioritize Inter for body text, fallback to Space Grotesk
+        sans: ['var(--font-inter)', 'var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
+        // Roboto Flex for headings or special text sections
+        display: ['var(--font-roboto-flex)', 'var(--font-inter)', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       container: {

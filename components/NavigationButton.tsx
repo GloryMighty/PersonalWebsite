@@ -1,34 +1,56 @@
 // Button for navigation across the site with the overall site stylistics
 import Link from 'next/link';
-import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import React from 'react';
 
+// Define props interface with optional variant
 interface NavigationButtonProps {
+  label: string;
   href: string;
-  label?: string;
+  variant?: 'default' | 'small' | 'back';
 }
 
-export default function NavigationButton({ href, label = 'Back' }: NavigationButtonProps) {
+// NavigationButton component with flexible styling
+const NavigationButton: React.FC<NavigationButtonProps> = ({ 
+  label, 
+  href, 
+  variant = 'default' 
+}) => {
+  // Dynamic classes based on variant
+  const baseClasses = "transition-all duration-300 ease-in-out";
+  const variantClasses = {
+    default: "px-4 py-2 rounded-full text-sm md:text-base hover:bg-gray-200/50 dark:hover:bg-gray-800/50",
+    small: "px-2 py-1 rounded-full text-xs hover:bg-gray-200/30 dark:hover:bg-gray-800/30",
+    back: "fixed top-4 left-4 z-50 group flex items-center space-x-3 text-gray-300 hover:text-white"
+  };
+
+  // Render different button styles based on variant
+  if (variant === 'back') {
+    return (
+      <Link 
+        href={href} 
+        className={`${baseClasses} ${variantClasses.back}`}
+        aria-label={label}
+      >
+        <div className="p-2 rounded-full bg-gray-800/30 backdrop-blur-sm 
+                        group-hover:bg-gray-800/50 transition-all duration-300">
+          {/* Back icon can be added here if needed */}
+        </div>
+        <span className="text-sm group-hover:text-white transition-colors">
+          {label}
+        </span>
+      </Link>
+    );
+  }
+
+  // Default and small variants
   return (
     <Link 
       href={href} 
-      className="fixed top-4 left-4 z-50 group flex items-center space-x-3 text-gray-300 hover:text-white 
-                 transition-all duration-300 ease-in-out"
-      aria-label={label}
+      className={`${baseClasses} ${variantClasses[variant]}`}
     >
-      <div className="p-2 rounded-full bg-gray-800/30 backdrop-blur-sm 
-                    group-hover:bg-gray-700/40 border border-gray-700/30
-                    transition-all duration-300 ease-in-out 
-                    shadow-lg shadow-gray-900/20">
-        <ArrowLeftIcon 
-          className="h-5 w-5 text-gray-300 group-hover:text-white 
-                     transition-all duration-300 ease-in-out" 
-        />
-      </div>
-      <span className="text-sm font-medium bg-clip-text hover:text-transparent 
-                     hover:bg-gradient-to-r from-white to-blue-200
-                     transition-all duration-300 ease-in-out">
-        {label}
-      </span>
+      {label}
     </Link>
   );
-}
+};
+
+export default NavigationButton;
