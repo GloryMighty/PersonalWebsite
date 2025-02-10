@@ -49,7 +49,7 @@ const projects: Project[] = [
       text: "Bringing my garage's website to this millenia was super easy and fast. The quality and the functionality of the website is exactly what I wanted! ",
       author: "Markus Ketonen",
       role: "Owner, Autoparsinta",
-      image: "/testimonials/Autoparsinta.jpg"
+      image: "/Testimonials/Autoparsinta.jpg"
     }
   },
   { 
@@ -78,7 +78,7 @@ const projects: Project[] = [
       text: "Smoothly executed with an unique idea, Tinderizzer completely changed my approach to online dating. The AI feedback is incredibly insightful and has boosted my confidence.",
       author: "Batu",
       role: "User, Tinderizzer",
-      image: "/testimonials/Tinderizzer.png"
+      image: "/Testimonials/Tinderizzer.png"
     }
   },
   { 
@@ -102,7 +102,7 @@ const projects: Project[] = [
       text: "PVLogix AI Assistant has revolutionized my document analysis workflow. The ability to query multiple PDFs and get concise insights is a game-changer for my research.",
       author: "Dr. Elena Rodriguez",
       role: "Research Scientist",
-      image: "/testimonials/PVLogix.jpg"
+      image: "/Testimonials/PVLogix.jpg"
     }
   },
   { 
