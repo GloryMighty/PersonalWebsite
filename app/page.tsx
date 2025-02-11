@@ -272,7 +272,7 @@ const revenueData = [
   { month: 'Me', revenue: 5000 },
   { month: 'And', revenue: 8000 },
   { month: 'After', revenue: 8000 },
-  { month: '=>', revenue: 150000 },
+  { month: '=>', revenue: 500000 },
 ];
 
 // Main Page Component
@@ -371,7 +371,7 @@ return (
             className="text-center content-glass p-8 backdrop-blur-md max-w-3xl mx-auto"
           >
             <h2 className="tech-text text-3xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
-              The Present and Future
+              OUR PRESENT AND FUTURE
             </h2>
             
             {/* Revenue Growth Graph */}

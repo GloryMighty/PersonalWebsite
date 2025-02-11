@@ -3,15 +3,16 @@
 "use client"
 
 // Framer Motion and React imports
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, useScroll, useMotionValue, MotionValue } from 'framer-motion'
 import Image from 'next/image'
 
 // Import other necessary components and types
 import ConstellationBackground from "@/components/ConstellationBackground"
-import SocialLinksWidget from "@/components/SocialLinksWidget"
 import ChatWidget from "@/components/ChatWidget"
+import SocialLinksWidget from "@/components/SocialLinksWidget"
 import Shevrons from "@/components/Shevrons"
+import TechStack from "@/components/TechStack"
 
 // Project data and types
 interface Project {
@@ -127,35 +128,6 @@ const PROJECT_STYLES = {
   },
 }
 
-// Matrix-like code animation component
-const MatrixCodeBackground = () => {
-  // Use a consistent seed for random generation to prevent hydration errors
-  const codeLines = Array.from({ length: 50 }, (_, index) => {
-    // Use a deterministic method to generate "random" binary strings
-    const seed = index * 1.618; // Using golden ratio as a seed
-    const randomBinary = Math.abs(Math.sin(seed)).toString(2).slice(2, 12).padStart(10, '0')
-    return randomBinary
-  })
-
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {codeLines.map((codeLine, index) => (
-        <div 
-          key={index} 
-          className="absolute text-green-500/30 text-xs font-mono opacity-50 animate-matrix-fall"
-          style={{
-            left: `${(index * 7.5) % 100}%`, // Deterministic positioning
-            animationDelay: `${index * 0.2}s`, // Consistent delay
-            animationDuration: `${5 + (index % 3)}s` // Consistent duration
-          }}
-        >
-          {codeLine}
-        </div>
-      ))}
-    </div>
-  )
-}
-
 // Spark and Chevron Visual Component
 const ProjectSeparator = () => {
   // Generate random spark positions and intensities
@@ -205,61 +177,6 @@ const ProjectSeparator = () => {
             d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"
           />
         </svg>
-      </div>
-    </div>
-  )
-}
-
-// Modernized Stack Component
-const TechStack = ({ stack }: { stack?: { name: string, icon: string }[] }) => {
-  if (!stack || stack.length === 0) return null;
-
-  return (
-    <div className="mt-4 p-4 bg-gray-900/50 rounded-xl border border-cyan-500/30 shadow-lg">
-      <h3 className="text-lg font-semibold text-cyan-300 mb-3 text-center">
-        Technology Stack
-      </h3>
-      <div className="flex flex-wrap justify-center gap-4">
-        {stack.map((tech, index) => (
-          <motion.div
-            key={tech.name}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ 
-              opacity: 1, 
-              scale: 1,
-              rotate: index % 2 === 0 ? [0, -5, 5, 0] : [0, 5, -5, 0]
-            }}
-            transition={{ 
-              duration: 0.5, 
-              delay: index * 0.1,
-              type: "spring",
-              stiffness: 300
-            }}
-            whileHover={{ 
-              scale: 1.1,
-              rotate: 0,
-              transition: { duration: 0.2 }
-            }}
-            className="
-              flex flex-col items-center justify-center 
-              p-3 rounded-lg 
-              bg-gray-800/70 
-              border border-cyan-500/30
-              hover:border-cyan-500/70
-              hover:bg-gray-800/90
-              transition-all duration-300
-              cursor-pointer
-              group
-            "
-          >
-            <span className="text-3xl mb-2 group-hover:text-cyan-300 transition-colors">
-              {tech.icon}
-            </span>
-            <span className="text-sm text-gray-300 group-hover:text-cyan-200 transition-colors">
-              {tech.name}
-            </span>
-          </motion.div>
-        ))}
       </div>
     </div>
   )
@@ -425,11 +342,65 @@ const ProjectImageDisplay = ({
 }
 
 // Main Projects Page Component
-export default function ProjectsPage() {
-  // Manage selected images for each project
+const ProjectsPage = () => {
   const [selectedImages, setSelectedImages] = useState<{[key: number]: string}>({})
+  const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
+  const projectContainerRef = useRef<HTMLDivElement>(null)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Update selected image on hover
+  // Scroll to specific project
+  const scrollToProject = (index: number) => {
+    const projectElement = document.getElementById(`project-${projects[index].id}`);
+    
+    if (projectElement) {
+      // Add an offset for the first project to prevent it from being too high
+      const offset = index === 0 ? 100 : 0; // 100px offset for the first project
+      
+      window.scrollTo({
+        top: projectElement.offsetTop - offset,
+        behavior: 'smooth'
+      });
+      
+      setCurrentProjectIndex(index);
+    }
+  };
+
+  // Handle scroll to update current project index
+  useEffect(() => {
+    const handleScroll = () => {
+      const projectContainer = projectContainerRef.current
+      if (projectContainer) {
+        const projectElements = projectContainer.querySelectorAll('.project-item')
+        const scrollPosition = window.scrollY
+
+        // Find the project currently in view
+        for (let i = 0; i < projectElements.length; i++) {
+          const element = projectElements[i] as HTMLElement
+          const elementTop = element.offsetTop
+          const elementHeight = element.offsetHeight
+
+          if (scrollPosition >= elementTop && 
+              scrollPosition < elementTop + elementHeight) {
+            setCurrentProjectIndex(i)
+            break
+          }
+        }
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
+  // Function to handle first image selection
+  const handleFirstImage = (projectId: number, imageSrc: string) => {
+    setSelectedImages(prev => ({
+      ...prev,
+      [projectId]: imageSrc
+    }))
+  }
+
+  // Function to handle thumbnail click
   const handleThumbnailClick = (projectId: number, imageSrc: string) => {
     setSelectedImages(prev => ({
       ...prev,
@@ -437,60 +408,93 @@ export default function ProjectsPage() {
     }))
   }
 
-  // Update selected image on click
-  const handleFirstImage = (projectId: number, imageSrc: string) => {
-    setSelectedImages(prev => ({
-      ...prev,
-      [projectId]: imageSrc
-    }))
-  }
-  
+  // Get scroll progress
+  const { scrollYProgress } = useScroll()
+
   return (
-    <div className="pt-24 min-h-screen flex flex-col items-center justify-start">
-      <motion.h1 
-        initial={{ opacity: 0, y: -50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-8 text-gray-800 dark:text-gray-200"
+    <div className="projects-container relative">
+      {/* Constellation Background */}
+      <ConstellationBackground scrollYProgress={scrollYProgress} />
+
+      {/* Chat and Social Widgets */}
+      <ChatWidget />
+      <SocialLinksWidget />
+
+      {/* Projects Container */}
+      <motion.div 
+        ref={projectContainerRef} 
+        className="projects-wrapper flex flex-col items-center space-y-16 py-16"
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: { opacity: 0 },
+          visible: { 
+            opacity: 1,
+            transition: {
+              staggerChildren: 0.3
+            }
+          }
+        }}
       >
-        GALLERY
-      </motion.h1>
-
-      {projects.map((project, index) => (
-        <React.Fragment key={project.id}>
-          <ProjectImageDisplay 
-            project={project} 
-            selectedImages={selectedImages}
-            handleFirstImage={handleFirstImage}
-            handleThumbnailClick={handleThumbnailClick}
-            isLastProject={index === projects.length - 1}
-          />
-          {project.title === "My Introduction" && (
-            <div className="flex flex-col items-center justify-center mt-8 space-y-4">
-              <p className="text-xl text-cyan-300 font-medium text-center animate-pulse">
-                Have more questions about me? Don&apos;t hesitate to ask VAI
-              </p>
-              <div className="animate-slow-bounce">
-                <Shevrons 
-                  direction="right" 
-                  variant="triple" 
-                  size={48} 
-                  className="text-cyan-500 opacity-70 hover:opacity-100 transition-opacity duration-300"
-                />
+        {projects.map((project, index) => (
+          <React.Fragment key={project.id}>
+            <motion.div
+              id={`project-${project.id}`}
+              className={`project-item ${index === currentProjectIndex ? 'active' : ''}`}
+              variants={{
+                hidden: { opacity: 0, y: 50 },
+                visible: { opacity: 1, y: 0 }
+              }}
+            >
+              <ProjectImageDisplay 
+                project={project} 
+                selectedImages={selectedImages}
+                handleFirstImage={handleFirstImage}
+                handleThumbnailClick={handleThumbnailClick}
+                isLastProject={index === projects.length - 1}
+              />
+            </motion.div>
+            
+            {/* Add navigation Shevrons between projects, except for the first project */}
+            {index > 0 && index < projects.length && (
+              <div className="flex flex-col items-center space-y-4 w-full py-8">
+                <div className="flex justify-between w-full px-24">
+                  <Shevrons 
+                    direction="up" 
+                    variant="triple"
+                    onClick={() => scrollToProject(index - 1)}
+                    className="opacity-50 hover:opacity-100 text-blue-300 hover:text-blue-500 transition-all duration-300 transform hover:-translate-y-2 scale-150"
+                    size={48}
+                  />
+                  <Shevrons 
+                    direction="down" 
+                    variant="triple"
+                    onClick={() => scrollToProject(index)}
+                    className="opacity-50 hover:opacity-100 text-blue-300 hover:text-blue-500 transition-all duration-300 transform hover:translate-y-2 scale-150"
+                    size={48}
+                  />
+                </div>
+                <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
               </div>
-            </div>
-          )}
-        </React.Fragment>
-      ))}
-
-      {/* Fixed widgets */}
-      <div className="fixed top-4 right-4 md:top-8 md:right-8 z-50 flex space-x-4">
-        <SocialLinksWidget />
-        <ChatWidget />
+            )}
+          </React.Fragment>
+        ))}
+      </motion.div>
+      
+      {/* VAI Questions Section */}
+      <div className="w-full flex flex-col items-center justify-center py-8 space-y-4">
+        <p className="text-xl text-blue-300 hover:text-blue-500 transition-colors duration-300 cursor-pointer">
+          Have more questions? Ask VAI!
+        </p>
+        <Shevrons 
+          direction="right" 
+          variant="triple"
+          className="opacity-50 hover:opacity-100 text-blue-300 hover:text-blue-500 transition-all duration-300 transform hover:translate-x-2 scale-150"
+          size={48}
+        />
       </div>
-
-      {/* Background */}
-      <ConstellationBackground scrollYProgress={useMotionValue(0)} />
     </div>
   )
 }
+
+export default ProjectsPage;
