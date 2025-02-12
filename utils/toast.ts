@@ -1,5 +1,12 @@
 import toast from 'react-hot-toast';
 
+// Ensure toast is only used on client-side
+const safeToast = (toastFn: (message: string) => void) => (message: string) => {
+  if (typeof window !== 'undefined') {
+    toastFn(message);
+  }
+};
+
 // Mobile-friendly toast configurations
 export const toastOptions = {
   // Ensure good visibility and readability on mobile
@@ -18,23 +25,23 @@ export const toastOptions = {
 };
 
 // Utility functions for different toast types
-export const showSuccessToast = (message: string) => {
+export const showSuccessToast = safeToast((message: string) => {
   toast.success(message, {
     ...toastOptions,
     icon: '✅',
   });
-};
+});
 
-export const showErrorToast = (message: string) => {
+export const showErrorToast = safeToast((message: string) => {
   toast.error(message, {
     ...toastOptions,
     icon: '❌',
   });
-};
+});
 
-export const showInfoToast = (message: string) => {
+export const showInfoToast = safeToast((message: string) => {
   toast(message, {
     ...toastOptions,
     icon: 'ℹ️',
   });
-};
+});
