@@ -170,6 +170,7 @@ export default function PricingPage() {
           </p>
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full text-sm transition duration-300 ease-in-out"
+            onClick={() => window.open('https://wa.me/358451333953', '_blank')}
           >
             Contact for Custom Pricing
           </button>

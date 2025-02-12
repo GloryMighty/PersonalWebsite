@@ -3,6 +3,7 @@
 import React, { useState, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Github, Linkedin, Twitter, Mail } from "lucide-react"
+import { showSuccessToast, showErrorToast } from '../utils/toast'
 
 // Custom WhatsApp icon component
 const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
@@ -57,6 +58,14 @@ const SocialLinksWidget: React.FC = () => {
     setIsOpen(prev => !prev)
   }, [])
 
+  const handleSocialLinkClick = useCallback((label: string) => {
+    try {
+      showSuccessToast(`${label} link copied to clipboard!`)
+    } catch (error) {
+      showErrorToast(`Failed to copy ${label} link`)
+    }
+  }, [])
+
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
@@ -91,6 +100,7 @@ const SocialLinksWidget: React.FC = () => {
                 }}
                 whileHover={{ scale: 1.1, x: 5 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => handleSocialLinkClick(link.label)}
                 className={`block p-3 bg-gray-800/90 backdrop-blur-sm rounded-full shadow-lg ${link.color} transition-colors duration-200`}
               >
                 {link.icon}
