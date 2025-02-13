@@ -1,3 +1,10 @@
+if (process.env.NODE_ENV === 'development') {
+  console.log('Environment Details:', {
+    VERCEL_DEPLOYMENT: process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT,
+    VERCEL_ENV: process.env.VERCEL_ENV || 'Not on Vercel'
+  });
+}
+
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { NextResponse } from 'next/server';
 

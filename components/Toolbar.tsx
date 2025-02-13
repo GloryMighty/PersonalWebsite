@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import NavigationButton from './NavigationButton';
 
 // Interface to define the structure of toolbar items
