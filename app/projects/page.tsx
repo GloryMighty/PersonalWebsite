@@ -398,7 +398,9 @@ const ProjectsPage = () => {
                   {project.testimonial ? (
                     <ProjectTestimonial testimonial={project.testimonial} />
                   ) : (
-                    <></>
+                    <p className="text-lg leading-relaxed text-gray-300 bg-opacity-50 backdrop-blur-sm border-l-6 border-cyan-500 pl-6 -ml-4 transition-all duration-300 hover:border-opacity-100 hover:shadow-lg hover:bg-gray-800/70">
+                      {`Explore our portfolio of innovative projects that showcase our commitment to excellence and creative problem-solving. Each project tells a unique story of innovation and impact.`}
+                    </p>
                   )}
                 </div>
               </div>

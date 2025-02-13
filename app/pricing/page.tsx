@@ -168,8 +168,8 @@ export default function PricingPage() {
             Need a Custom Solution?
           </h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-6">
-            Every business is unique. If our standard plans don't quite fit your needs, 
-            we're happy to create a tailored solution that perfectly matches your requirements.
+            Every business is unique. If our standard plans don&#39;t quite fit your needs, 
+            we&#39;re happy to create a tailored solution that perfectly matches your requirements.
           </p>
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full text-sm transition duration-300 ease-in-out"

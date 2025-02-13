@@ -197,12 +197,14 @@ const AnimatedTitle: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % titles.length)
-    }, 3000)
+    const timer = setTimeout(() => {
+      setCurrentIndex((prevIndex) => 
+        (prevIndex + 1) % titles.length
+      );
+    }, 3000);
 
-    return () => clearInterval(interval)
-  }, [])
+    return () => clearTimeout(timer);
+  }, [titles.length]);
 
   return (
     <div className="relative h-8 overflow-hidden"> {/* Added overflow-hidden */}

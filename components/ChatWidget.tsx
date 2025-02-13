@@ -2,7 +2,7 @@
 
 "use client"
 
-import React, { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import React, { useState, useEffect, useRef, useCallback, useMemo, forwardRef } from "react"
 import { motion } from "framer-motion"
 import { Loader2, XCircle, MessageSquare } from "lucide-react"
 
@@ -31,7 +31,9 @@ const MessageItem = React.memo<{ message: Message }>(({ message }) => (
   </div>
 ));
 
-const ChatWidget: React.FC = () => {
+interface ChatWidgetProps {}
+
+const ChatWidget = forwardRef<HTMLDivElement, ChatWidgetProps>((props, ref) => {
   const [messages, setMessages] = useState<Message[]>([])
   const [inputMessage, setInputMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
@@ -179,6 +181,7 @@ const ChatWidget: React.FC = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
       className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-50"
+      ref={ref}
     >
       {isOpen ? (
         <div className="bg-gray-800/80 backdrop-blur-md rounded-lg shadow-lg w-80 md:w-96 flex flex-col h-[400px] md:h-[500px]">
@@ -233,6 +236,8 @@ const ChatWidget: React.FC = () => {
       )}
     </motion.div>
   )
-}
+});
+
+ChatWidget.displayName = 'ChatWidget';
 
 export default React.memo(ChatWidget);

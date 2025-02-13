@@ -3,7 +3,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { useTransform } from "framer-motion"
+import { useTransform, useMotionValue } from "framer-motion"
 import { motion } from "framer-motion"
 
 interface Point {
@@ -65,10 +65,11 @@ const ConstellationBackground: React.FC<{
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
   const animationFrameRef = useRef<number>()
 
-  // Optional parallax effect using useTransform
-  const y = scrollYProgress 
-    ? useTransform(scrollYProgress, [0, 1], ['0%', '-25%']) 
-    : { get: () => '0%' }
+  // Move useTransform outside of conditional logic
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const transformedX = useTransform(x, [0, dimensions.width], [0, 1]);
+  const transformedY = useTransform(y, [0, dimensions.height], [0, 1]);
 
   // Initialize points with random positions. For mobile devices use less points and smaller sizes
   const initializePoints = (width: number, height: number) => {
@@ -253,7 +254,7 @@ const ConstellationBackground: React.FC<{
         width: '100%', 
         height: '100%', 
         zIndex: -1,
-        y: y.get() 
+        y: scrollYProgress ? transformedY : '0%' 
       }}
       className={`absolute inset-0 overflow-hidden ${className}`}
     >
