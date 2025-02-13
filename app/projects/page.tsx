@@ -10,8 +10,7 @@ import Image from 'next/image'
 // Import other necessary components and types
 import ConstellationBackground from "@/components/ConstellationBackground"
 import ChatWidget from "@/components/ChatWidget"
-import SocialLinksWidget from "@/components/SocialLinksWidget"
-import Shevrons from "@/components/Shevrons"
+import SocialLinksWidget from "@/components/SocialLinksWidget" 
 import TechStack from "@/components/TechStack"
 
 // Project data and types
@@ -105,14 +104,6 @@ const projects: Project[] = [
       image: "/Testimonials/PDF.png"
     }
   },
-  { 
-    id: 4, 
-    title: "My Introduction", 
-    description: 'Just me',
-    images: [
-      "/MyIntroduction/me.png",
-    ]
-  },
 ]
 
 // Define consistent project styles with consistent, descriptive naming
@@ -196,7 +187,7 @@ const ProjectImageDisplay = ({
   handleThumbnailClick: (projectId: number, imageSrc: string) => void,
   isLastProject?: boolean 
 }) => {
-  // Determine project-specific styles
+  // Unified project style 
   const projectStyle = PROJECT_STYLES.PVLOGIX
 
   // Track current image index
@@ -218,7 +209,7 @@ const ProjectImageDisplay = ({
       {/* Content Section */}
       <div className="flex mb-8">
         {/* Left Column: Text and Stack */}
-        <div className="w-1/2 pr-8 space-y-4 relative group pl-4">
+        <div className="w-full space-y-4 relative group pl-4">
           <h2 className={`
             text-4xl font-bold tracking-tight 
             bg-clip-text text-transparent 
@@ -248,30 +239,6 @@ const ProjectImageDisplay = ({
           
           {project.stack && (
             <TechStack stack={project.stack} />
-          )}
-        </div>
-
-        {/* Right Column: Testimonial */}
-        <div className="w-1/2 pl-8 flex flex-col justify-center">
-          {project.testimonial && (
-            <div className="bg-blue-1000/30 rounded-xl p-6 ml-4 flex flex-col items-center">
-              <Image 
-                src={project.testimonial.image} 
-                alt={project.testimonial.author} 
-                width={120} 
-                height={120} 
-                className="rounded-full mb-4 border-4 border-blue-700"
-              />
-              <div className="text-center">
-                <p className="italic text-gray-300 mb-2">"{project.testimonial.text}"</p>
-                <div>
-                  <span className="font-semibold text-gray-200">{project.testimonial.author}</span>
-                  {project.testimonial.role && (
-                    <p className="text-sm text-gray-400">{project.testimonial.role}</p>
-                  )}
-                </div>
-              </div>
-            </div>
           )}
         </div>
       </div>
@@ -341,165 +308,111 @@ const ProjectImageDisplay = ({
   )
 }
 
+// Project Testimonial Component
+const ProjectTestimonial = ({ testimonial }: { testimonial?: Project['testimonial'] }) => {
+  if (!testimonial) return null
+
+  return (
+    <motion.div 
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+      className="bg-gray-900/50 rounded-xl p-6 sm:p-8 border border-gray-600 hover:shadow-lg transition-all duration-300 flex flex-col items-center"
+    >
+      {testimonial.image && (
+        <div className="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-gray-600">
+          <Image 
+            src={testimonial.image} 
+            alt={`${testimonial.author}'s profile`} 
+            width={96} 
+            height={96} 
+            className="object-cover w-full h-full"
+          />
+        </div>
+      )}
+      <div className="text-center">
+        <p className="text-base sm:text-lg text-gray-300 italic mb-4">
+          "{testimonial.text}"
+        </p>
+        <div>
+          <h3 className="text-xl font-bold text-gray-200">
+            {testimonial.author}
+          </h3>
+          {testimonial.role && (
+            <p className="text-sm text-gray-400">
+              {testimonial.role}
+            </p>
+          )}
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 // Main Projects Page Component
 const ProjectsPage = () => {
   const [selectedImages, setSelectedImages] = useState<{[key: number]: string}>({})
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0)
-  const projectContainerRef = useRef<HTMLDivElement>(null)
-  const scrollRef = useRef<HTMLDivElement>(null)
 
-  // Scroll to specific project
-  const scrollToProject = (index: number) => {
-    const projectElement = document.getElementById(`project-${projects[index].id}`);
-    
-    if (projectElement) {
-      // Add an offset for the first project to prevent it from being too high
-      const offset = index === 0 ? 100 : 0; // 100px offset for the first project
-      
-      window.scrollTo({
-        top: projectElement.offsetTop - offset,
-        behavior: 'smooth'
-      });
-      
-      setCurrentProjectIndex(index);
-    }
-  };
-
-  // Handle scroll to update current project index
-  useEffect(() => {
-    const handleScroll = () => {
-      const projectContainer = projectContainerRef.current
-      if (projectContainer) {
-        const projectElements = projectContainer.querySelectorAll('.project-item')
-        const scrollPosition = window.scrollY
-
-        // Find the project currently in view
-        for (let i = 0; i < projectElements.length; i++) {
-          const element = projectElements[i] as HTMLElement
-          const elementTop = element.offsetTop
-          const elementHeight = element.offsetHeight
-
-          if (scrollPosition >= elementTop && 
-              scrollPosition < elementTop + elementHeight) {
-            setCurrentProjectIndex(i)
-            break
-          }
-        }
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  // Function to handle first image selection
   const handleFirstImage = (projectId: number, imageSrc: string) => {
-    setSelectedImages(prev => ({
-      ...prev,
-      [projectId]: imageSrc
-    }))
+    setSelectedImages(prev => ({...prev, [projectId]: imageSrc}))
   }
 
-  // Function to handle thumbnail click
   const handleThumbnailClick = (projectId: number, imageSrc: string) => {
-    setSelectedImages(prev => ({
-      ...prev,
-      [projectId]: imageSrc
-    }))
+    setSelectedImages(prev => ({...prev, [projectId]: imageSrc}))
   }
-
-  // Get scroll progress
-  const { scrollYProgress } = useScroll()
 
   return (
-    <div className="projects-container relative">
-      {/* Constellation Background */}
-      <ConstellationBackground scrollYProgress={scrollYProgress} />
+    <div className="relative min-h-screen w-full overflow-x-hidden">
+      <ConstellationBackground className="opacity-50" />
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-5">
+        <motion.h1 
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center text-white mb-12 tracking-tight relative z-10"
+        >
+          <br />
+          <br />
+   
+          MY PROJECTS 
+        </motion.h1>
 
-      {/* Chat and Social Widgets */}
-      <ChatWidget />
-      <SocialLinksWidget />
-
-      {/* Projects Container */}
-      <motion.div 
-        ref={projectContainerRef} 
-        className="projects-wrapper flex flex-col items-center space-y-16 py-16"
-        initial="hidden"
-        animate="visible"
-        variants={{
-          hidden: { opacity: 0 },
-          visible: { 
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.3
-            }
-          }
-        }}
-      >
-        {projects.map((project, index) => (
-          <React.Fragment key={project.id}>
-            <motion.div
-              id={`project-${project.id}`}
-              className={`project-item ${index === currentProjectIndex ? 'active' : ''}`}
-              variants={{
-                hidden: { opacity: 0, y: 50 },
-                visible: { opacity: 1, y: 0 }
-              }}
-            >
-              <ProjectImageDisplay 
-                project={project} 
-                selectedImages={selectedImages}
-                handleFirstImage={handleFirstImage}
-                handleThumbnailClick={handleThumbnailClick}
-                isLastProject={index === projects.length - 1}
-              />
-            </motion.div>
-            
-            {/* Add navigation Shevrons between projects, except for the first project */}
-            {index > 0 && index < projects.length && (
-              <div className="flex flex-col items-center space-y-4 w-full py-8">
-                <div className="flex justify-between w-full px-24">
-                  <Shevrons 
-                    direction="up" 
-                    variant="triple"
-                    onClick={() => scrollToProject(index - 1)}
-                    className="opacity-50 hover:opacity-100 text-blue-300 hover:text-blue-500 transition-all duration-300 transform hover:-translate-y-2 scale-150"
-                    size={48}
-                  />
-                  <Shevrons 
-                    direction="down" 
-                    variant="triple"
-                    onClick={() => scrollToProject(index)}
-                    className="opacity-50 hover:opacity-100 text-blue-300 hover:text-blue-500 transition-all duration-300 transform hover:translate-y-2 scale-150"
-                    size={48}
+        <div className="space-y-16 md:space-y-24">
+          {projects.map((project, index) => (
+            <React.Fragment key={project.id}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                {/* Project Image Section */}
+                <div className="w-full">
+                  <ProjectImageDisplay 
+                    project={project} 
+                    selectedImages={selectedImages}
+                    handleFirstImage={handleFirstImage}
+                    handleThumbnailClick={handleThumbnailClick}
+                    isLastProject={index === projects.length - 1}
                   />
                 </div>
-                <div className="w-full h-0.5 bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
+
+                {/* Project Details or Testimonial Section */}
+                <div className="w-full">
+                  {project.testimonial ? (
+                    <ProjectTestimonial testimonial={project.testimonial} />
+                  ) : (
+                    <></>
+                  )}
+                </div>
               </div>
-            )}
-          </React.Fragment>
-        ))}
-      </motion.div>
-      
-      {/* VAI Questions Section */}
-      <div className="w-full flex flex-col items-center justify-center py-8 space-y-4">
-        <p className="text-xl text-blue-300 hover:text-blue-500 transition-colors duration-300 cursor-pointer">
-          Have more questions? Ask VAI!
-        </p>
-        <Shevrons 
-          direction="right" 
-          variant="triple"
-          className="opacity-50 hover:opacity-100 text-blue-300 hover:text-blue-500 transition-all duration-300 transform hover:translate-x-2 scale-150"
-          size={48}
-        />
-      </div>
-      <footer className="container mx-auto px-4 py-8 text-center">
-        <div className="content-glass p-4 backdrop-blur-md max-w-xl mx-auto">
-          <p className="tech-text text-sm text-blue-200">
-            2025 Viacheslav Mamatov. All rights reserved.
-          </p>
+
+              {/* Add separator between projects, except for the last one */}
+              {index < projects.length - 1 && <ProjectSeparator />}
+            </React.Fragment>
+          ))}
         </div>
-      </footer>
+      </div>
+
+      <ChatWidget />
+      <SocialLinksWidget />
+      <CopyrightFooter />
     </div>
   )
 }

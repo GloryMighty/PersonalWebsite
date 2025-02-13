@@ -51,7 +51,13 @@ const mobilePointSpeed = isMobile ? MOBILE_POINT_SPEED : POINT_SPEED
 const mobileBaseAlpha = isMobile ? MOBILE_BASE_ALPHA : BASE_ALPHA
 const mobileConnectionAlpha = isMobile ? MOBILE_CONNECTION_ALPHA : CONNECTION_ALPHA
 
-const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYProgress }) => {
+const ConstellationBackground: React.FC<{ 
+  scrollYProgress?: any, 
+  className?: string 
+}> = ({ 
+  scrollYProgress, 
+  className = '' 
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const pointsRef = useRef<Point[]>([])
   const connectionsRef = useRef<Connection[]>([])
@@ -59,8 +65,10 @@ const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYPr
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
   const animationFrameRef = useRef<number>()
 
-  // Parallax effect using useTransform
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '-25%']) // Adjust '-20%' to control parallax strength
+  // Optional parallax effect using useTransform
+  const y = scrollYProgress 
+    ? useTransform(scrollYProgress, [0, 1], ['0%', '-25%']) 
+    : { get: () => '0%' }
 
   // Initialize points with random positions. For mobile devices use less points and smaller sizes
   const initializePoints = (width: number, height: number) => {
@@ -70,8 +78,8 @@ const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYPr
       vx: (Math.random() - 0.5) * mobilePointSpeed,
       vy: (Math.random() - 0.5) * mobilePointSpeed,
       radius: Math.random() * 3 + 1, // Increased star size
-      alpha: Math.random() * 0.3 + BASE_ALPHA,
-      targetAlpha: Math.random() * 0.3 + BASE_ALPHA,
+      alpha: Math.random() * 0.3 + mobileBaseAlpha,
+      targetAlpha: Math.random() * 0.3 + mobileBaseAlpha,
     }))
   }
 
@@ -237,20 +245,27 @@ const ConstellationBackground: React.FC<{ scrollYProgress: any }> = ({ scrollYPr
   }, [dimensions])
 
   return (
-    <div className="fixed inset-0 w-full h-full -z-10">
-      <motion.canvas
-        ref={canvasRef}
-        className="w-full h-full"
-        style={{
-          mixBlendMode: 'lighten',
-          y: y,
-        }}
+    <motion.div 
+      style={{ 
+        position: 'fixed', 
+        top: 0, 
+        left: 0, 
+        width: '100%', 
+        height: '100%', 
+        zIndex: -1,
+        y: y.get() 
+      }}
+      className={`absolute inset-0 overflow-hidden ${className}`}
+    >
+      <canvas 
+        ref={canvasRef} 
+        style={{ 
+          width: '100%', 
+          height: '100%', 
+          position: 'absolute' 
+        }} 
       />
-      <div 
-        className="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900/50"
-        style={{ mixBlendMode: 'multiply' }}
-      />
-    </div>
+    </motion.div>
   )
 }
 

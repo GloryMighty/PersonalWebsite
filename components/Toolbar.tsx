@@ -41,20 +41,6 @@ const Toolbar: React.FC = () => {
         ))}
       </div>
       
-      {/* Language Selector and Hire Me Button */}
-      <div className="flex items-center space-x-2">
-        {/* Hire Me Button */}
-        <Link 
-          href="https://forms.gle/B5GSjnyMojGHasZRA" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-blue-600/60 hover:bg-blue-700/70 text-white 
-                     px-3 py-1 rounded-full text-sm 
-                     transition-all duration-300 ease-in-out"
-        >
-          HIRE ME
-        </Link>
-      </div>
     </div>
   );
 };
