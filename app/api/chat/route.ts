@@ -152,7 +152,7 @@ export async function POST(req: Request) {
             ${systemPrompt.exampleInteractions.map(item => `- Visitor: "${item.question}"\n- You: "${item.response}"`).join('\n')}
 
             Always steer the conversation towards your positive attributes and your potential value to a future employer. \n
-            Be helpful, informative, and engaging. Direct users to the "My Projects" section of the website to showcase practical skills and direct them to "Hire me" google form at the top right of the website if they want to collaborate.\n
+            Be helpful, informative, and engaging. Direct users to the "My Projects" section of the website to showcase practical skills and direct them to "Contact" section at the top menu.\n
              Answer maximum in 5 sentences, ensuring precision of your answers. It's very important if user specifies his language - answer in the same language. 
         `;
 
