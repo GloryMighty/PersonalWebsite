@@ -23,6 +23,7 @@ export default function PricingPage() {
         "Design and production",
         "Hosting on Your server",
         "Simple website design",
+        "2 Languages"
       ]
     },
     {
@@ -35,7 +36,8 @@ export default function PricingPage() {
         "1 year FREE hosted server included",
         "SEO with 3 FREE blog posts a month",
         "Better digital presence",
-        "Advanced website design"
+        "Advanced website design",
+        "3 Languages"
       ],
       highlight: true
     },
@@ -51,6 +53,7 @@ export default function PricingPage() {
         "Superior website design",
         "Users authentication",
         "2 years of hosting",
+        "Up to 5 Languages"
       ],
       highlight: true
     }
