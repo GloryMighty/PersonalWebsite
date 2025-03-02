@@ -13,7 +13,21 @@ import ChatWidget from "@/components/ChatWidget"
 import SocialLinksWidget from "@/components/SocialLinksWidget" 
 import TechStack from "@/components/TechStack"
 
-// Project data and types
+// Company and Project data and types
+interface CompanyInfo {
+  name: string
+  overview: string
+  expertise: string[]
+  locations: string[]
+  languages: string[]
+  values: string[]
+  contact: {
+    email: string
+    phone: string
+    website: string
+  }
+}
+
 interface Project {
   id: number
   title: string
@@ -28,7 +42,58 @@ interface Project {
   }
 }
 
+// Company Information
+const companyInfo: CompanyInfo = {
+  name: "Vima Web Solutions",
+  overview: "A dynamic web development agency with over 13 years of entrepreneurial experience. We specialize in creating customized, modern web applications that transform digital visions into reality.",
+  expertise: [
+    "Programming Languages: Python, JavaScript, CSS, PHP, TypeScript, HTML",
+    "Core Technologies: Next.js, React, Node.js, PostgreSQL",
+    "Specialties: AI Integration, Full-Stack Development, Multilingual Web Solutions"
+  ],
+  locations: [
+    "Pietarsaari, Finland",
+    "Istanbul, Turkey"
+  ],
+  languages: [
+    "English", "Arabic", "Finnish", "Russian", "Swedish", "Turkish"
+  ],
+  values: [
+    "Customer-oriented, honest, diligent, transparent, and efficient",
+    "Programming languages are tools to accomplish desired results",
+    "Serving businesses of all sizes with flexible, customized solutions"
+  ],
+  contact: {
+    email: "vimawebsolutions@gmail.com",
+    phone: "+905070711259",
+    website: "vimawebs.com"
+  }
+}
+
 const projects: Project[] = [
+  { 
+    id: 4,  
+    title: "VIMA Web Solutions", 
+    description: 'Our flagship web development agency showcasing our comprehensive approach to creating modern, multilingual web solutions. Specializing in AI integration, full-stack development, and transforming digital visions into reality.',
+    images: [
+      "/vimawebs/Showcase.png",
+      "/vimawebs/details.png",
+      "/vimawebs/pricing.png",
+      "/vimawebs/speed.png"
+    ],
+    stack: [
+      { name: 'Next.js', icon: '🔺' },
+      { name: 'React', icon: '⚛️' },
+      { name: 'Tailwind CSS', icon: '🌬️' },
+      { name: 'AI Integration', icon: '🤖' }
+    ],
+    testimonial: {
+      text: "Vima Web Solutions transformed our digital presence with cutting-edge technologies and a customer-first approach. Their multilingual support and AI integration are the most go-to tools in the industry.",
+      author: "COMPANY CLIENT",
+      role: "Batuhan Yorur",
+      image: "/vimawebs/testimonial_2.png"
+    }
+  },
   { 
     id: 1, 
     title: "AUTOPARSINTA", 
@@ -53,7 +118,7 @@ const projects: Project[] = [
   },
   { 
     id: 2, 
-    title: "TINDERIZZER",
+    title: "TINDERIZZER", 
     description: 'An AI-powered dating coach designed to help craft the perfect messages for online dating. Leverages Google Gemini API to analyze messages, provide feedback, and boost user\'s communication skills with a fun "Rizz Score".',
     images: [
       "/ReactScreen/Intro.png",
@@ -414,18 +479,21 @@ const ProjectsPage = () => {
 
       <ChatWidget />
       <SocialLinksWidget />
-      <CopyrightFooter />
+      <CopyrightFooter companyInfo={companyInfo} />
     </div>
   )
 }
 
 // Copyright footer
-const CopyrightFooter = () => {
+const CopyrightFooter = ({ companyInfo }: { companyInfo: CompanyInfo }) => {
   return (
     <footer className="container mx-auto px-4 py-8 text-center">
       <div className="content-glass p-4 backdrop-blur-md max-w-xl mx-auto">
         <p className="tech-text text-sm text-blue-200">
-          2025 Viacheslav Mamatov. All rights reserved.
+          {companyInfo.name} {new Date().getFullYear()}. All rights reserved.
+        </p>
+        <p className="tech-text text-sm text-blue-200">
+          {companyInfo.contact.email} | {companyInfo.contact.phone} | <a href={companyInfo.contact.website} target="_blank" rel="noopener noreferrer">{companyInfo.contact.website}</a>
         </p>
       </div>
     </footer>

@@ -21,7 +21,7 @@ const WhatsAppIcon: React.FC<{ className?: string }> = ({ className }) => (
 const socialLinks = [
   {
     icon: <WhatsAppIcon className="w-6 h-6" />,
-    href: "https://wa.me/358451333953",
+    href: "https://wa.me/905356765899",
     label: "WhatsApp",
     color: "hover:text-green-500",
   },

@@ -8,7 +8,6 @@ import SocialLinksWidget from "../components/SocialLinksWidget"
 import ConstellationBackground from "../components/ConstellationBackground"
 import MicroSparks from "../components/MicroSparks"
 import ChatWidget from "../components/ChatWidget"
-import NavigationButton from "../components/NavigationButton"
 import Shevrons from '@/components/Shevrons';
 import Image from 'next/image';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
@@ -193,7 +192,7 @@ const BioSection: React.FC<BioSectionProps> = ({ title, content, index }) => {
 
 // Add this new component for the animated title
 const AnimatedTitle: React.FC = () => {
-  const titles = ["Website Applications", "AI Automations", "Tech Enthusiast"]
+  const titles = ["Web Development", "AI Automations", "Tech Enthusiast", "Entrepreneurial Soul"]
   const [currentIndex, setCurrentIndex] = useState(0)
 
   useEffect(() => {
@@ -201,10 +200,10 @@ const AnimatedTitle: React.FC = () => {
       setCurrentIndex((prevIndex) => 
         (prevIndex + 1) % titles.length
       );
-    }, 3000);
+    }, 2000);
 
     return () => clearTimeout(timer);
-  }, [titles.length]);
+  }, [currentIndex, titles.length]);
 
   return (
     <div className="relative h-8 overflow-hidden"> {/* Added overflow-hidden */}
