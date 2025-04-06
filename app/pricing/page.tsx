@@ -178,7 +178,6 @@ export default function PricingPage() {
             Contact for Custom Pricing
           </button>
         </div>
-
         {/* Footer with Copyright */}
         <footer className="container mx-auto px-4 py-8 text-center">
           <div className="content-glass p-4 backdrop-blur-md max-w-xl mx-auto">

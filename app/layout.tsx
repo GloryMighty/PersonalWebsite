@@ -26,8 +26,8 @@ const robotoFlex = Roboto_Flex({
 
 // Add metadata and favicon.ico from the public folder
 export const metadata: Metadata = {
-  title: "WebDev",
-  description: "Personal portfolio and professional showcase",
+  title: "Your best tech sales and operational manager",
+  description: "Personal portfolio and professional showcase of Viacheslav's abilities",
   icons: {
     icon: '/favicon.ico',
   },

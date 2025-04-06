@@ -265,9 +265,38 @@ const bioSections: BioSection[] = [
     content:
       "Currently, I'm immersed in exciting projects that push the boundaries of what's possible in web development. I'm always eager to collaborate on innovative solutions that make a real impact in the digital world.",
   },
-]
+] 
 
-const revenueData = [
+  
+const skillsSections: BioSection[] = [
+    {
+      title: "Leadership & Management",
+      content:
+        "Experienced in managing startup projects and teams, with skills in risk assessment, stakeholder communication, and strategic planning. Successfully led teams through complex projects while maintaining efficiency.",
+    },
+    {
+      title: "Problem Solving",
+      content:
+        "Adept at developing creative solutions within constraints, as demonstrated by implementing standardized procedures that improved team efficiency by 10% while allowing for creative problem-solving.",
+    },
+    {
+      title: "Customer Relations",
+      content:
+        "Exceptional ability to maintain high customer satisfaction levels even under pressure, handling over 500 daily requests while ensuring positive outcomes and building strong client relationships.",
+    },
+    {
+      title: "Communication & Negotiation",
+      content:
+        "Strong negotiation and lead generation skills, successfully attracting foreign clients through strategic outreach. Effective communicator who bridges cultural and linguistic gaps in global teams.",
+    },
+    {
+      title: "Teaching & Mentoring",
+      content:
+        "Proven ability to educate and mentor, having helped over 200 students improve their English language skills through personalized, communicative teaching approaches.",
+    },
+  ]
+
+  const revenueData = [
   { month: 'Before', revenue: 5000 },
   { month: 'Hiring', revenue: 7000 },
   { month: 'Me', revenue: 5000 },
@@ -354,6 +383,19 @@ return (
             </div>
           </section>
 
+          <section id="my-skills" className="container mx-auto px-4 py-16">
+            <div className="content-glass p-8 backdrop-blur-md max-w-4xl mx-auto">
+              <h2 className="tech-text text-3xl mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
+                My Skills
+              </h2>
+              <div className="space-y-12">
+                {skillsSections.map((section, index) => (
+                  <BioSection key={`skills-${index}`} title={section.title} content={section.content} index={index} />
+                ))}
+              </div>
+            </div>
+          </section>
+
           <div className="flex justify-center items-center mb-8">
             <Shevrons 
               direction="down" 
@@ -417,13 +459,13 @@ return (
                     stroke="#8884d8" 
                     strokeWidth={3} 
                     activeDot={{ r: 8 }} 
-                    name="Your Revenue" 
+                    name="Your Monthly Revenue" 
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
             <p className="text-sm text-blue-200 mb-6">
-              Projected revenue growth after website optimization and strategic improvements
+              Projected revenue growth after adding Viachelsav to your team. 
             </p>
 
             <h2 className="tech-text text-3xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">

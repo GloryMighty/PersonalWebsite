@@ -372,6 +372,9 @@ const ProjectImageDisplay = ({
     </div>
   )
 }
+const redirectToCases = () => {
+  window.location.href = "/cases"
+}
 
 // Project Testimonial Component
 const ProjectTestimonial = ({ testimonial }: { testimonial?: Project['testimonial'] }) => {
@@ -476,27 +479,41 @@ const ProjectsPage = () => {
           ))}
         </div>
       </div>
-
+          {/* Call to Action Section */}
+          <section className="container mx-auto px-4 py-16 text-center">
+            <div className="content-glass p-8 backdrop-blur-md max-w-4xl mx-auto">
+              <h2 className="tech-text text-3xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
+                Ready to see my used skills in cases?
+              </h2>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                animate={{
+                  y: [0, -10, 0],
+                  transition: {
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatType: 'loop',
+                    ease: 'easeInOut'
+                  }
+                }}
+                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-full transition duration-300 ease-in-out transform hover:-translate-y-1 shadow-lg hover:shadow-xl tech-text"
+                onClick={() => redirectToCases()}
+              >
+                Explore My Cases
+              </motion.button>
+            </div>
+          </section>
+      <footer className="container mx-auto px-4 py-8 text-center">
+          <div className="content-glass p-4 backdrop-blur-md max-w-xl mx-auto">
+            <p className="tech-text text-sm text-blue-200">
+              2025 Viacheslav Mamatov. All rights reserved.
+            </p>
+          </div>
+        </footer>
       <ChatWidget />
       <SocialLinksWidget />
-      <CopyrightFooter companyInfo={companyInfo} />
     </div>
-  )
-}
-
-// Copyright footer
-const CopyrightFooter = ({ companyInfo }: { companyInfo: CompanyInfo }) => {
-  return (
-    <footer className="container mx-auto px-4 py-8 text-center">
-      <div className="content-glass p-4 backdrop-blur-md max-w-xl mx-auto">
-        <p className="tech-text text-sm text-blue-200">
-          {companyInfo.name} {new Date().getFullYear()}. All rights reserved.
-        </p>
-        <p className="tech-text text-sm text-blue-200">
-          {companyInfo.contact.email} | {companyInfo.contact.phone} | <a href={companyInfo.contact.website} target="_blank" rel="noopener noreferrer">{companyInfo.contact.website}</a>
-        </p>
-      </div>
-    </footer>
   )
 }
 

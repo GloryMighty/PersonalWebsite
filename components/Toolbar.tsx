@@ -13,6 +13,7 @@ const Toolbar: React.FC = () => {
   const mainNavItems: ToolbarItem[] = [
     { label: 'Home', href: '/' },
     { label: 'Projects', href: '/projects' },
+    { label: 'Cases', href: '/cases' },
     { label: 'Pricing', href: '/pricing' },
     { label: 'Contact', href: '/contact' }
   ];
