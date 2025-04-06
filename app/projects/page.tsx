@@ -483,7 +483,7 @@ const ProjectsPage = () => {
           <section className="container mx-auto px-4 py-16 text-center">
             <div className="content-glass p-8 backdrop-blur-md max-w-4xl mx-auto">
               <h2 className="tech-text text-3xl mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-200">
-                Ready to see my used skills in cases?
+                Ready to see the numbers?
               </h2>
               <motion.button
                 whileHover={{ scale: 1.05 }}
